@@ -364,6 +364,12 @@
     background-color: transparent;
   }
 
+  /* Set submenu height to match header when using horizontal mega menu */
+  .menu-list__submenu:has(.mega-menu__list--horizontal),
+  .overflow-menu:has(.mega-menu__list--horizontal)::part(overflow) {
+    --submenu-height: var(--header-height);
+  }
+
   .header__row[style*='--border-bottom-width: 0px'] {
     .menu-list__submenu.color-scheme-matches-parent,
     .overflow-menu.color-scheme-matches-parent::part(overflow) {
@@ -417,6 +423,14 @@
     padding-block-end: var(--submenu-padding-block-end);
     padding-inline: var(--section-padding-inline);
   }
+
+  /* Remove padding for horizontal mega menu to match header height exactly */
+  .menu-list__submenu-inner:has(.mega-menu__list--horizontal),
+  .overflow-menu:has(.mega-menu__list--horizontal)::part(overflow-list) {
+    padding-block-start: 0;
+    padding-block-end: 0;
+  }
+
 
   .overflow-menu::part(overflow) {
     --menu-top-level-font-size: var(--font-size--xlarge);
@@ -516,6 +530,44 @@
     &:hover {
       color: var(--menu-child-active-font-color);
     }
+  }
+
+  /* Horizontal mega menu styles */
+  .mega-menu__list--horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--menu-horizontal-gap);
+    padding-block: 0;
+    height: var(--header-height);
+    align-items: center;
+  }
+
+  .mega-menu__horizontal-item {
+    flex: 0 0 auto;
+  }
+
+  .mega-menu__list--horizontal .mega-menu__link {
+    border-bottom: 1px solid transparent;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-inline: 0;
+
+    /* Match header top-level typography */
+    font-family: var(--menu-top-level-font-family);
+    font-style: var(--menu-top-level-font-style);
+    font-weight: var(--menu-top-level-font-weight);
+    font-size: var(--menu-top-level-font-size);
+    line-height: var(--menu-top-level-font-line-height);
+    text-transform: var(--menu-top-level-font-case);
+  }
+
+  .mega-menu__list--horizontal .mega-menu__link:hover {
+    border-bottom-color: currentColor;
+  }
+
+  .mega-menu__list--horizontal .mega-menu__link--active {
+    font-weight: 600;
+    border-bottom-color: currentColor;
   }
 
   .mega-menu__link--parent {
@@ -667,6 +719,19 @@
 
   .menu-list__list-item[slot='overflow'] .section .mega-menu__grid {
     grid-column: 1;
+  }
+
+  .mega-menu__list--horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--menu-horizontal-gap);
+    padding-block: 0;
+    height: var(--header-height);
+    align-items: center;
+  }
+
+  .mega-menu__horizontal-item {
+    flex: 0 0 auto;
   }
 
   .mega-menu__content-list li {
