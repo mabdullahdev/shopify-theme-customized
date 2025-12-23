@@ -22,10 +22,14 @@
     "men_hero_image": {
       "type": "men-page-hero-image",
       "settings": {
+        "background_image": "shopify://shop_images/Gemini_Generated_Image_e5c4t8e5c4t8e5c4.png",
         "heading": "WE LOVE PRE-LOVED.",
-        "subheading": "Shop quality secondhand fashion.",
+        "subheading": "Carefully selected, high-quality secondhand fashion.",
         "button_label": "Shop now",
-        "button_link": "/collections/all"
+        "button_link": "/collections/all",
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 40
       }
     }
   },
