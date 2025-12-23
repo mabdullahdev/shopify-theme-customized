@@ -1,0 +1,196 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="section section--full-width color-{{ section.settings.color_scheme }}">
+  <div
+    class="men-hero spacing-style"
+    style="
+      {% render 'spacing-style', settings: section.settings %}
+      {% if section.settings.background_image != blank %}
+        --men-hero-background-image: url('{{ section.settings.background_image | image_url: width: 2400 }}');
+      {% endif %}
+    "
+  >
+    <div class="men-hero__overlay"></div>
+    <div class="men-hero__inner">
+      {% if section.settings.heading != blank %}
+        <h1 class="men-hero__title">
+          {% assign heading_parts = section.settings.heading | split: ' PRE-LOVED' %}
+          {% if heading_parts.size > 1 %}
+            {{ heading_parts[0] }}<br>PRE-LOVED{{ heading_parts[1] }}
+          {% else %}
+            {{ section.settings.heading }}
+          {% endif %}
+        </h1>
+      {% endif %}
+
+      {% if section.settings.subheading != blank %}
+        <p class="men-hero__subtitle">
+          {{ section.settings.subheading }}
+        </p>
+      {% endif %}
+
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="men-hero__button">
+          <span>{{ section.settings.button_label }}</span>
+          <span class="men-hero__button-icon">→</span>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .men-hero {
+    position: relative;
+    min-height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: clamp(3rem, 6vh, 5rem);
+    padding-inline: var(--page-margin);
+    background-color: transparent;
+    background-image: var(--men-hero-background-image);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+  }
+
+  .men-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+    pointer-events: none;
+  }
+
+  .men-hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: min(56rem, 100%);
+    text-align: center;
+  }
+
+  .men-hero__title {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-heading--family, inherit);
+    font-weight: 800;
+    font-size: clamp(2.25rem, 4vw, 3rem);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .men-hero__subtitle {
+    margin: 0 0 1.5rem;
+    font-size: clamp(1rem, 1.4vw, 1.125rem);
+  }
+
+  .men-hero__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.9rem;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: #ffe500;
+    color: #000;
+    box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 0.08);
+    transition:
+      transform var(--animation-speed) var(--animation-easing),
+      box-shadow var(--animation-speed) var(--animation-easing),
+      background-color var(--animation-speed) var(--animation-easing);
+  }
+
+  .men-hero__button-icon {
+    display: inline-block;
+    transform: translateY(1px);
+  }
+
+  .men-hero__button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.12);
+    background-color: #ffef66;
+  }
+
+  @media screen and (max-width: 749px) {
+    .men-hero {
+      padding-inline: var(--padding-inline, 1.25rem);
+      text-align: center;
+    }
+
+    .men-hero__inner {
+      align-items: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Men's Hero Banner",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "WE LOVE PRE-LOVED."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Shop quality secondhand fashion."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}
+
+

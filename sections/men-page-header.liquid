@@ -1,0 +1,94 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="section section--full-width-margin section--full-width color-{{ section.settings.color_scheme }}">
+  <div class="men-page-header spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    <div class="men-page-header__inner">
+      <h3 class="men-page-header__title">{{ page.title | upcase }}</h3>
+      <a href="{{ section.settings.link_url }}" class="men-page-header__link">
+        {{ section.settings.link_text }}
+      </a>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .men-page-header {
+    padding-block: var(--padding-lg);
+    grid-column: 1 / -1;
+    padding-inline: var(--page-margin);
+  }
+
+  .men-page-header__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: var(--page-width);
+    margin-inline: auto;
+  }
+
+  .men-page-header__title {
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .men-page-header__link {
+    text-decoration: none;
+    color: var(--color-foreground);
+    transition: color var(--animation-speed) var(--animation-easing);
+  }
+
+  .men-page-header__link:hover {
+    color: var(--color-foreground);
+    opacity: 0.8;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Men's Page Header",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Link Text",
+      "default": "Shop Women"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Page Link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}

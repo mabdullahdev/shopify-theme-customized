@@ -1,0 +1,36 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "men_header": {
+      "type": "men-page-header",
+      "settings": {
+        "link_text": "Shop Women",
+        "link_url": "shopify://pages/women",
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "men_hero_image": {
+      "type": "men-page-hero-image",
+      "settings": {
+        "heading": "WE LOVE PRE-LOVED.",
+        "subheading": "Shop quality secondhand fashion.",
+        "button_label": "Shop now",
+        "button_link": "/collections/all"
+      }
+    }
+  },
+  "order": [
+    "men_header",
+    "men_hero_image"
+  ]
+}
