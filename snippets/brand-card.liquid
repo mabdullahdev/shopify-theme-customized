@@ -1,0 +1,32 @@
+{%- doc -%}
+  Renders a brand card for men's brands section.
+
+  @param {object} block - The block object
+  @param {object} section - The section object
+{%- enddoc -%}
+
+{% assign image = block.settings.image %}
+{% assign brand_name = block.settings.brand_name | default: '' %}
+<a
+  class="men-brands__card"
+  href="{{ block.settings.link | default: '#' }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="men-brands__media{% if image == blank %} men-brands__media--placeholder{% endif %}">
+    {% if image != blank %}
+      {{ image | image_url: width: 400 | image_tag:
+        loading: 'lazy',
+        widths: '200, 300, 400',
+        sizes: '(min-width: 1000px) calc(100vw / 6), (min-width: 750px) calc(100vw / 3), 50vw',
+        alt: brand_name | default: 'Brand logo'
+      }}
+    {% else %}
+      <div class="men-brands__placeholder">
+        <span class="men-brands__placeholder-label">
+          {{ brand_name | default: 'Brand' }}
+        </span>
+      </div>
+    {% endif %}
+  </div>
+</a>
+

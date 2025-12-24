@@ -1,0 +1,28 @@
+{% render 'brand-card', block: block, section: section %}
+
+{% schema %}
+{
+  "name": "Brand Card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand Name",
+      "info": "Optional brand name for accessibility and placeholder"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Brand Logo"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link",
+      "info": "Optional link to brand page or collection"
+    }
+  ]
+}
+{% endschema %}
+

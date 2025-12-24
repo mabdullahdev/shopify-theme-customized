@@ -1,0 +1,336 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="section section--full-width color-{{ section.settings.color_scheme }}">
+  <div
+    class="men-brands spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %}"
+  >
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <div class="men-brands__header">
+        {% if section.settings.heading != blank %}
+          <h2 class="men-brands__title">
+            {{ section.settings.heading }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <p class="men-brands__subtitle">
+            {{ section.settings.subheading }}
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="men-brands__grid">
+        {% for block in section.blocks %}
+          {% render 'brand-card', block: block, section: section %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="men-brands__footer">
+      <a href="{{ section.settings.view_all_link }}" class="men-brands__view-all">
+        {{ section.settings.view_all_text | default: 'View all brands' }}
+        <svg class="men-brands__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .men-brands {
+    padding-block: clamp(2rem, 4vh, 3rem);
+    padding-inline: var(--page-margin);
+  }
+
+  .men-brands__header {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .men-brands__title {
+    margin: 0;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    text-transform: uppercase;
+  }
+
+  .men-brands__subtitle {
+    margin: 0;
+    max-width: 32rem;
+    font-size: 0.95rem;
+    color: rgb(0 0 0 / 0.7);
+  }
+
+  .men-brands__grid {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .men-brands__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition: opacity var(--animation-speed) var(--animation-easing);
+  }
+
+  .men-brands__card:hover {
+    opacity: 0.8;
+  }
+
+  .men-brands__media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .men-brands__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .men-brands__media--placeholder {
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  }
+
+  .men-brands__placeholder {
+    padding: 0.75rem 1rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.9);
+  }
+
+  .men-brands__placeholder-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .men-brands__footer {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .men-brands__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--color-foreground);
+    font-size: 0.95rem;
+    text-decoration: underline;
+    text-decoration-color: #000;
+    text-underline-offset: 0.25rem;
+    transition: opacity var(--animation-speed) var(--animation-easing);
+  }
+
+  .men-brands__view-all:hover {
+    opacity: 0.8;
+  }
+
+  .men-brands__arrow {
+    flex-shrink: 0;
+  }
+
+  @media screen and (max-width: 999px) {
+    .men-brands__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.625rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .men-brands {
+      padding-inline: var(--padding-inline, 1.25rem);
+      padding-block: clamp(2rem, 4vh, 3rem);
+    }
+
+    .men-brands__header {
+      margin-bottom: 1.25rem;
+      text-align: left;
+    }
+
+    .men-brands__title {
+      font-size: clamp(1.5rem, 4vw, 1.75rem);
+    }
+
+    .men-brands__subtitle {
+      font-size: 0.875rem;
+    }
+
+    .men-brands__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .men-brands__footer {
+      margin-top: 1.5rem;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .men-brands {
+      padding-inline: 1rem;
+    }
+
+    .men-brands__header {
+      margin-bottom: 1rem;
+    }
+
+    .men-brands__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.625rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Men's Brands Grid",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "THOUSANDS OF BRANDS. FROM CULT TO CLASSIC."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "All quality checked by us."
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View All Link Text",
+      "default": "View all brands"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View All Link URL"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "brand_name",
+          "label": "Brand Name",
+          "info": "Optional brand name for accessibility and placeholder"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Brand Logo"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional link to brand page or collection"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [
+    {
+      "name": "Men's brands grid",
+      "blocks": [
+        {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Ralph Lauren"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Nike"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "brand_name": "adidas"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Barbour"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "brand_name": "COS"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "brand_name": "ALLSAINTS"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

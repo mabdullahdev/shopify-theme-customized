@@ -72,11 +72,136 @@
         "padding-block-start": 32,
         "padding-block-end": 48
       }
+    },
+    "men_brands": {
+      "type": "men-page-brands",
+      "blocks": {
+        "nike": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Nike",
+            "image": "shopify://shop_images/brand-nike.png",
+            "link": ""
+          }
+        },
+        "adidas": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Adidas",
+            "image": "shopify://shop_images/brand-adidas.png",
+            "link": ""
+          }
+        },
+        "puma": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Puma",
+            "image": "shopify://shop_images/brand-puma.png",
+            "link": ""
+          }
+        },
+        "levis": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Levi's",
+            "image": "shopify://shop_images/brand-levis.png",
+            "link": ""
+          }
+        },
+        "zara": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Zara",
+            "image": "shopify://shop_images/brand-zara.png",
+            "link": ""
+          }
+        },
+        "h_and_m": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "H&M",
+            "image": "shopify://shop_images/brand-handm.png",
+            "link": ""
+          }
+        },
+        "tommy_hilfiger": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Tommy Hilfiger",
+            "image": "shopify://shop_images/brand-tommy-hilfiger.png",
+            "link": ""
+          }
+        },
+        "calvin_klein": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Calvin Klein",
+            "image": "shopify://shop_images/brand-ck.png",
+            "link": ""
+          }
+        },
+        "lacoste": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Lacoste",
+            "image": "shopify://shop_images/brand-lacoste.png",
+            "link": ""
+          }
+        },
+        "next": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Next",
+            "image": "shopify://shop_images/brand-next.png",
+            "link": ""
+          }
+        },
+        "reebok": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Reebok",
+            "image": "shopify://shop_images/brand-reebok.png",
+            "link": ""
+          }
+        },
+        "ralph_lauren": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Ralph Lauren",
+            "image": "shopify://shop_images/brand-raulph-lauren.png",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "nike",
+        "adidas",
+        "puma",
+        "levis",
+        "zara",
+        "h_and_m",
+        "tommy_hilfiger",
+        "calvin_klein",
+        "lacoste",
+        "next",
+        "reebok",
+        "ralph_lauren"
+      ],
+      "settings": {
+        "heading": "A WORLD OF BRANDS, FROM CULT ICONS TO ENDURING CLASSICS.",
+        "subheading": "Handpicked and quality verified by us.",
+        "view_all_text": "View all brands",
+        "view_all_link": "shopify://collections",
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
     }
   },
   "order": [
     "men_header",
     "men_hero_image",
-    "men_categories"
+    "men_categories",
+    "men_brands"
   ]
 }
