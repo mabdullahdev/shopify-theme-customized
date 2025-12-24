@@ -1,0 +1,37 @@
+{%- doc -%}
+  Renders a category card for men's categories section.
+
+  @param {object} block - The block object
+  @param {object} section - The section object
+{%- enddoc -%}
+
+{% assign image = block.settings.image %}
+<a
+  class="men-categories__card"
+  href="{{ block.settings.link | default: '#' }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="men-categories__media{% if image == blank %} men-categories__media--placeholder{% endif %}">
+    {% if image != blank %}
+      {{ image | image_url: width: 600 | image_tag:
+        loading: 'lazy',
+        widths: '300, 400, 600',
+        sizes: '(min-width: 1000px) 33vw, 50vw',
+        alt: block.settings.title
+      }}
+    {% else %}
+      <div class="men-categories__placeholder">
+        <span class="men-categories__placeholder-label">
+          {{ block.settings.title | default: 'Category' }}
+        </span>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="men-categories__label">
+    <span class="men-categories__name">
+      {{ block.settings.title }}
+    </span>
+  </div>
+</a>
+

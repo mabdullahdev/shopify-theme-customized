@@ -1,0 +1,33 @@
+{% render 'category-card', block: block, section: section %}
+
+{% schema %}
+{
+  "name": "Category Card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Category"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Badge",
+      "info": "Optional short label such as \"New\", \"Best sellers\", or \"Pre‑loved picks\"."
+    }
+  ]
+}
+{% endschema %}
+

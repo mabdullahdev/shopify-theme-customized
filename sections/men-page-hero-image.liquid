@@ -41,16 +41,16 @@
 {% stylesheet %}
   .men-hero {
     position: relative;
-    min-height: 360px;
+    min-height: 375px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding-block: clamp(3rem, 6vh, 5rem);
     padding-inline: var(--page-margin);
-    background-color: transparent;
+    background-color: #F2F3ED;
     background-image: var(--men-hero-background-image);
-    background-size: contain;
-    background-position: center;
+    background-size: 50% auto;
+    background-position: right center;
     background-repeat: no-repeat;
     overflow: hidden;
   }
@@ -81,26 +81,25 @@
 
   .men-hero__subtitle {
     margin: 0 0 1.5rem;
-    font-size: clamp(0rem, 1.4vw, .875rem);
+    font-size: clamp(0.75rem, 2vw, .875rem);
   }
 
   .men-hero__button {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.9rem 1.9rem;
-    border-radius: 999px;
-    font-weight: 700;
+    padding: 0.875rem 1.75rem;
+    border-radius: 0;
+    font-weight: 600;
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background-color: #ffe500;
-    color: #000;
-    box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 0.08);
+    letter-spacing: 0.1em;
+    background-color: transparent;
+    color: var(--color-foreground, #000);
+    border: 1.5px solid var(--color-foreground, #000);
     transition:
-      transform var(--animation-speed) var(--animation-easing),
-      box-shadow var(--animation-speed) var(--animation-easing),
-      background-color var(--animation-speed) var(--animation-easing);
+      background-color var(--animation-speed) var(--animation-easing),
+      color var(--animation-speed) var(--animation-easing);
   }
 
   .men-hero__button-icon {
@@ -109,19 +108,50 @@
   }
 
   .men-hero__button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.12);
-    background-color: #ffef66;
+    background-color: var(--color-foreground, #000);
+    color: var(--color-background, #fff);
   }
 
   @media screen and (max-width: 749px) {
     .men-hero {
       padding-inline: var(--padding-inline, 1.25rem);
-      text-align: center;
+      padding-block: clamp(2rem, 5vh, 3rem);
+      min-height: auto;
+      background-image: none;
     }
 
     .men-hero__inner {
       align-items: center;
+      text-align: center;
+    }
+
+    .men-hero__title {
+      font-size: clamp(1.5rem, 6vw, 2rem);
+      margin-bottom: 0.5rem;
+    }
+
+    .men-hero__subtitle {
+      font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+      margin-bottom: 1.25rem;
+    }
+
+    .men-hero__button {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .men-hero {
+      min-height: auto;
+      padding-block: clamp(1.5rem, 4vh, 2.5rem);
+    }
+
+    .men-hero__button {
+      padding: 0.5rem 1rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
     }
   }
 {% endstylesheet %}
