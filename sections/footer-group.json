@@ -23,7 +23,7 @@
             "vertical_alignment": "center",
             "align_baseline": false,
             "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "flex-start",
             "gap": 6,
             "width": "fill",
             "custom_width": 100,
@@ -109,41 +109,87 @@
             "text_T8tcEb"
           ]
         },
-        "email_signup_C6bdQD": {
-          "type": "email-signup",
+        "footer_shop_links": {
+          "type": "footer-shop-links",
           "settings": {
-            "width": "fill",
-            "custom_width": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "heading": "",
-            "heading_preset": "h3",
-            "border_style": "all",
-            "border_width": 1,
-            "border_radius": 100,
-            "input_type_preset": "paragraph",
-            "style_class": "button",
-            "display_type": "text",
-            "label": "Sign up",
-            "integrated_button": false,
-            "button_type_preset": "paragraph",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "heading": "SHOP",
+            "heading_size": 24,
+            "heading_weight": 700,
+            "heading_spacing": 12,
+            "link_1_label": "Shop women",
+            "link_1_url": "",
+            "link_2_label": "Shop men",
+            "link_2_url": "",
+            "link_3_label": "Gift Card",
+            "link_3_url": "",
+            "link_4_label": "Clearance",
+            "link_4_url": "",
+            "text_color": "#000000",
+            "padding-block-start": 24,
+            "padding-block-end": 24,
+            "padding-inline-start": 24,
+            "padding-inline-end": 24
+          },
+          "blocks": {}
+        },
+        "footer_support_links": {
+          "type": "footer-support-links",
+          "settings": {
+            "heading": "SUPPORT",
+            "heading_size": 24,
+            "heading_weight": 700,
+            "heading_spacing": 12,
+            "link_1_label": "Contact us",
+            "link_1_url": "",
+            "link_2_label": "Return an order",
+            "link_2_url": "",
+            "link_3_label": "Refund policy",
+            "link_3_url": "",
+            "link_4_label": "Shipping policy",
+            "link_4_url": "",
+            "text_color": "#000000",
+            "padding-block-start": 24,
+            "padding-block-end": 24,
+            "padding-inline-start": 24,
+            "padding-inline-end": 24
+          },
+          "blocks": {}
+        },
+        "footer_resell_links": {
+          "type": "footer-resell-links",
+          "settings": {
+            "heading": "CLEAROUT",
+            "heading_size": 24,
+            "heading_weight": 700,
+            "heading_spacing": 12,
+            "link_1_label": "Clear out",
+            "link_1_url": "",
+            "link_2_label": "Return bag",
+            "link_2_url": "",
+            "link_3_label": "Our fees",
+            "link_3_url": "",
+            "link_4_label": "Brand checker",
+            "link_4_url": "",
+            "text_color": "#000000",
+            "padding-block-start": 24,
+            "padding-block-end": 24,
+            "padding-inline-start": 24,
+            "padding-inline-end": 24
           },
           "blocks": {}
         }
       },
       "block_order": [
         "group_gYAM3w",
-        "email_signup_C6bdQD"
+        "footer_shop_links",
+        "footer_resell_links",
+        "footer_support_links",
       ],
       "name": "t:names.footer",
       "settings": {
         "section_width": "page-width",
         "gap": 20,
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-2",
         "padding-block-start": 36,
         "padding-block-end": 36
       }
@@ -154,7 +200,7 @@
         "footer_copyright_jweRK8": {
           "type": "footer-copyright",
           "settings": {
-            "show_powered_by": true,
+            "show_powered_by": false,
             "font_size": "0.75rem",
             "case": "none"
           },
@@ -167,38 +213,18 @@
             "case": "none"
           },
           "blocks": {}
-        },
-        "social_links_Ew63Kq": {
-          "type": "social-links",
-          "settings": {
-            "facebook_url": "",
-            "instagram_url": "https://www.instagram.com/ecot.store/",
-            "youtube_url": "",
-            "tiktok_url": "",
-            "twitter_url": "",
-            "threads_url": "",
-            "linkedin_url": "",
-            "bluesky_url": "",
-            "snapchat_url": "",
-            "pinterest_url": "",
-            "tumblr_url": "",
-            "vimeo_url": "",
-            "custom_url": ""
-          },
-          "blocks": {}
         }
       },
       "block_order": [
         "footer_copyright_jweRK8",
-        "footer_policy_list_VCdnpa",
-        "social_links_Ew63Kq"
+        "footer_policy_list_VCdnpa"
       ],
       "name": "t:names.utilities",
       "settings": {
         "section_width": "page-width",
         "gap": 24,
-        "divider_thickness": 0,
-        "color_scheme": "",
+        "divider_thickness": 1,
+        "color_scheme": "scheme-2",
         "padding-block-start": 20,
         "padding-block-end": 48
       }

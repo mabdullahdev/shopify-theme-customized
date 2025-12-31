@@ -279,7 +279,7 @@
       },
       "name": "Featured collection",
       "settings": {
-        "collection": "footwear",
+        "collection": "shoes",
         "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 8,
@@ -443,7 +443,7 @@
       "name": "t:names.collections_bento",
       "settings": {
         "collection_list": [
-          "footwear",
+          "shoes",
           "hoodies",
           "jackets",
           "frontpage"
