@@ -1,5 +1,5 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div class="section section--full-width-margin section--full-width color-{{ section.settings.color_scheme }}">
+<div class="section section--{{ section.settings.section_width }}-margin section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
   <div class="men-page-header spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
     <div class="men-page-header__inner">
       <h3 class="men-page-header__title">{{ page.title | upcase }}</h3>
@@ -13,8 +13,6 @@
 {% stylesheet %}
   .men-page-header {
     padding-block: var(--padding-lg);
-    grid-column: 1 / -1;
-    padding-inline: var(--page-margin);
   }
 
   .men-page-header__inner {
@@ -22,8 +20,6 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: var(--page-width);
-    margin-inline: auto;
   }
 
   .men-page-header__title {
@@ -44,7 +40,6 @@
 
   @media screen and (max-width: 749px) {
     .men-page-header {
-      padding-inline: var(--padding-inline, 1.25rem);
       padding-block: clamp(1.5rem, 4vh, 2.5rem);
     }
 
@@ -69,6 +64,22 @@
   "name": "Men's Page Header",
   "class": "section-wrapper",
   "settings": [
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
     {
       "type": "text",
       "id": "link_text",

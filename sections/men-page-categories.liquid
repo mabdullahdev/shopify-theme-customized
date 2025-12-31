@@ -1,5 +1,5 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div class="section section--full-width color-{{ section.settings.color_scheme }}">
+<div class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
   <div
     class="men-categories spacing-style"
     style="{% render 'spacing-style', settings: section.settings %}"
@@ -33,7 +33,6 @@
 {% stylesheet %}
   .men-categories {
     padding-block: clamp(2rem, 4vh, 3rem);
-    padding-inline: var(--page-margin);
   }
 
   .men-categories__header {
@@ -136,7 +135,6 @@
 
   @media screen and (max-width: 749px) {
     .men-categories {
-      padding-inline: var(--padding-inline, 1.25rem);
       padding-block: clamp(2rem, 4vh, 3rem);
     }
 
@@ -160,10 +158,6 @@
   }
 
   @media screen and (max-width: 480px) {
-    .men-categories {
-      padding-inline: 1rem;
-    }
-
     .men-categories__header {
       margin-bottom: 1rem;
     }
@@ -179,6 +173,22 @@
   "name": "Men's Categories Grid",
   "class": "section-wrapper",
   "settings": [
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
     {
       "type": "text",
       "id": "heading",

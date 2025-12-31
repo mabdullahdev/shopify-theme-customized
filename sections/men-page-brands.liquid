@@ -1,5 +1,5 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div class="section section--full-width color-{{ section.settings.color_scheme }}">
+<div class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
   <div
     class="men-brands spacing-style"
     style="{% render 'spacing-style', settings: section.settings %}"
@@ -42,7 +42,6 @@
 {% stylesheet %}
   .men-brands {
     padding-block: clamp(2rem, 4vh, 3rem);
-    padding-inline: var(--page-margin);
   }
 
   .men-brands__header {
@@ -97,7 +96,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
   }
 
   .men-brands__media img {
@@ -160,7 +158,6 @@
 
   @media screen and (max-width: 749px) {
     .men-brands {
-      padding-inline: var(--padding-inline, 1.25rem);
       padding-block: clamp(2rem, 4vh, 3rem);
     }
 
@@ -188,9 +185,6 @@
   }
 
   @media screen and (max-width: 480px) {
-    .men-brands {
-      padding-inline: 1rem;
-    }
 
     .men-brands__header {
       margin-bottom: 1rem;
@@ -208,6 +202,22 @@
   "name": "Men's Brands Grid",
   "class": "section-wrapper",
   "settings": [
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
     {
       "type": "text",
       "id": "heading",

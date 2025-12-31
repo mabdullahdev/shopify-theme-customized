@@ -1,5 +1,5 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div class="section section--full-width color-{{ section.settings.color_scheme }}">
+<div class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
   <div
     class="men-hero spacing-style"
     style="
@@ -161,6 +161,22 @@
   "name": "Men's Hero Banner",
   "class": "section-wrapper",
   "settings": [
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
     {
       "type": "image_picker",
       "id": "background_image",

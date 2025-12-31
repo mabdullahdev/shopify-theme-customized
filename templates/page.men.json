@@ -12,6 +12,7 @@
     "men_header": {
       "type": "men-page-header",
       "settings": {
+        "section_width": "page-width",
         "link_text": "Shop Women",
         "link_url": "shopify://pages/women",
         "color_scheme": "",
@@ -22,6 +23,7 @@
     "men_hero_image": {
       "type": "men-page-hero-image",
       "settings": {
+        "section_width": "page-width",
         "background_image": "shopify://shop_images/men-page-hero-image.png",
         "heading": "WE LOVE PRE-LOVED.",
         "subheading": "Carefully selected, high-quality secondhand fashion.",
@@ -66,6 +68,7 @@
         "shoes"
       ],
       "settings": {
+        "section_width": "page-width",
         "heading": "MEN'S CATEGORIES",
         "subheading": "Dial in your look with hand-picked pre-loved staples.",
         "color_scheme": "",
@@ -188,6 +191,7 @@
         "ralph_lauren"
       ],
       "settings": {
+        "section_width": "page-width",
         "heading": "A WORLD OF BRANDS, FROM CULT ICONS TO ENDURING CLASSICS.",
         "subheading": "Handpicked and quality verified by us.",
         "view_all_text": "View all brands",
