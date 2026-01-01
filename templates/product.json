@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
       "type": "product-information",
@@ -15,15 +16,16 @@
           "type": "_product-media-gallery",
           "static": true,
           "settings": {
-            "media_presentation": "grid",
+            "media_presentation": "carousel",
             "media_columns": "two",
             "image_gap": 4,
             "large_first_image": false,
-            "icons_style": "none",
+            "icons_style": "arrow",
             "slideshow_controls_style": "counter",
             "slideshow_mobile_controls_style": "dots",
             "thumbnail_position": "right",
             "thumbnail_width": 44,
+            "thumbnail_radius": 0,
             "aspect_ratio": "adapt",
             "constrain_to_viewport": true,
             "media_fit": "contain",
@@ -49,7 +51,7 @@
             "custom_width_mobile": 100,
             "height": "fit",
             "details_position": "flex-start",
-            "gap": 28,
+            "gap": 25,
             "sticky_details_desktop": true,
             "inherit_color_scheme": true,
             "color_scheme": "scheme-1",
@@ -70,7 +72,6 @@
               "type": "group",
               "name": "Header",
               "settings": {
-                "open_in_new_tab": false,
                 "content_direction": "column",
                 "vertical_on_mobile": true,
                 "horizontal_alignment": "flex-start",
@@ -98,6 +99,9 @@
                 "overlay_color": "#00000026",
                 "overlay_style": "solid",
                 "gradient_direction": "to top",
+                "link": "",
+                "open_in_new_tab": false,
+                "placeholder": "",
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -158,18 +162,18 @@
                 "price_tVjtKg"
               ]
             },
-            "divider_VJhene": {
-              "type": "_divider",
-              "name": "t:names.divider",
-              "settings": {
-                "thickness": 1,
-                "corner_radius": "square",
-                "width_percent": 100,
-                "padding-block-start": 0,
-                "padding-block-end": 0
-              },
-              "blocks": {}
-            },
+            // "divider_VJhene": {
+            //   "type": "_divider",
+            //   "name": "t:names.divider",
+            //   "settings": {
+            //     "thickness": 1,
+            //     "corner_radius": "square",
+            //     "width_percent": 100,
+            //     "padding-block-start": 0,
+            //     "padding-block-end": 0
+            //   },
+            //   "blocks": {}
+            // },
             "variant_picker_R3rGDr": {
               "type": "variant-picker",
               "settings": {
@@ -184,10 +188,11 @@
               "blocks": {}
             },
             "buy_buttons_eYQEYi": {
-              "type": "buy-buttons",
+              "type": "custom-buy-button",
               "settings": {
                 "stacking": true,
                 "show_pickup_availability": false,
+                "gift_card_form": true,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -196,6 +201,7 @@
               "blocks": {
                 "quantity": {
                   "type": "quantity",
+                  "disabled": true,
                   "static": true,
                   "settings": {},
                   "blocks": {}
@@ -216,6 +222,19 @@
                 }
               },
               "block_order": []
+            },
+            "trust_badges": {
+              "type": "product-trust-badges",
+              "settings": {
+                "badge_1_text": "Easy returns",
+                "badge_2_text": "Quality checked",
+                "badge_3_text": "Experts authenticated",
+                "padding-block-start": 16,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
             },
             "text_aEtTtq": {
               "type": "text",
@@ -246,9 +265,10 @@
           },
           "block_order": [
             "group_icgrde",
-            "divider_VJhene",
+            // "divider_VJhene",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
+            "trust_badges",
             "text_aEtTtq"
           ]
         }
@@ -259,6 +279,7 @@
         "equal_columns": false,
         "limit_details_width": false,
         "gap": 48,
+        "enable_sticky_add_to_cart": false,
         "color_scheme": "",
         "padding-block-start": 0,
         "padding-block-end": 0

@@ -1640,6 +1640,13 @@ media-gallery {
   }
 }
 
+/* Better viewport constraint for carousels - ensure they fit within viewport */
+.media-gallery--carousel :not(.dialog-zoomed-gallery) > .product-media-container.constrain-height {
+  --viewport-offset: 250px;
+  --constrained-min-height: 400px;
+  --constrained-height: max(var(--constrained-min-height), calc(100vh - var(--viewport-offset)));
+}
+
 media-gallery:where(.media-gallery--grid) .media-gallery__grid {
   display: none;
 }
@@ -1661,12 +1668,23 @@ media-gallery.media-gallery--grid .media-gallery__grid .product-media-container 
 
 @media screen and (min-width: 750px) {
   .product-media-container.constrain-height {
-    --viewport-offset: var(--header-height, 100px);
-    --constrained-min-height: 500px;
+    /* Account for header, section padding, and product details area */
+    --viewport-offset: calc(var(--header-height, 100px) + 120px);
+    --constrained-min-height: 400px;
+  }
+
+  /* Better constraint for carousels on desktop */
+  .media-gallery--carousel .product-media-container.constrain-height {
+    --viewport-offset: calc(var(--header-height, 100px) + 180px);
+    --constrained-min-height: 450px;
   }
 
   body:has(header-component[transparent]) .product-media-container.constrain-height {
-    --viewport-offset: 0px;
+    --viewport-offset: 120px;
+  }
+
+  body:has(header-component[transparent]) .media-gallery--carousel .product-media-container.constrain-height {
+    --viewport-offset: 180px;
   }
 
   .media-gallery--two-column .media-gallery__grid {
@@ -3418,6 +3436,11 @@ slideshow-container {
   position: relative;
   grid-area: container;
   container-type: inline-size;
+}
+
+/* Border for carousel slider container */
+.media-gallery--carousel slideshow-container {
+  border: 1px solid #f6f5f7;
 }
 
 @media screen and (min-width: 750px) {

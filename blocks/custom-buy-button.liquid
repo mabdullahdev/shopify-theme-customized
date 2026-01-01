@@ -1,0 +1,336 @@
+
+{% liquid
+  assign block_settings = block.settings
+  assign product = closest.product
+  if request.visual_preview_mode and product == blank
+    assign product = collections.all.products.first
+  endif
+
+  assign variant = closest.product.selected_or_first_available_variant
+  assign inventory_quantity = variant.inventory_quantity
+  assign inventory_policy = variant.inventory_policy
+
+  if variant.inventory_management == 'shopify'
+    assign inventory_managed = true
+  endif
+
+  assign can_add_to_cart = false
+  assign add_to_cart_text = 'products.product.unavailable' | t
+
+  if variant
+    if variant.quantity_rule.min > variant.inventory_quantity and inventory_managed and inventory_policy == 'deny'
+      assign quantity_rule_soldout = true
+    endif
+
+    if variant.available
+      assign can_add_to_cart = true
+      assign add_to_cart_text = 'products.product.add_to_cart' | t
+    elsif inventory_managed and inventory_quantity <= 0 and inventory_policy == 'deny' or quantity_rule_soldout
+      assign can_add_to_cart = false
+      assign add_to_cart_text = 'products.product.sold_out' | t
+    else
+      assign can_add_to_cart = false
+      assign add_to_cart_text = 'products.product.unavailable' | t
+    endif
+  endif
+%}
+
+<span
+  class="custom-buy-button-block custom-buy-button-block--{{ block.id }}"
+  {{ block.shopify_attributes }}
+>
+  {%- if product != blank -%}
+    {%- assign product_form_id = 'CustomBuyButton-ProductForm-' | append: section.id -%}
+    <product-form-component
+      data-section-id="{{ section.id }}"
+      data-product-id="{{ product.id }}"
+      data-product-url="{{ product.url }}"
+      on:submit="/handleSubmit"
+      data-quantity-default="{% if product.selected_or_first_available_variant.quantity_rule.min %}{{ product.selected_or_first_available_variant.quantity_rule.min }}{% else %}1{% endif %}"
+      data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
+    >
+      <div
+        class="visually-hidden"
+        aria-live="assertive"
+        role="status"
+        aria-atomic="true"
+        ref="liveRegion"
+      ></div>
+      {%- form 'product', product, id: product_form_id, data-type: 'add-to-cart-form' -%}
+        <input
+          type="hidden"
+          name="id"
+          ref="variantId"
+          value="{{ product.selected_or_first_available_variant.id }}"
+        >
+        <div
+          class="custom-buy-button-container spacing-style"
+          style="{% render 'spacing-style', settings: block_settings %}"
+          ref="productFormButtons"
+        >
+          {%- unless block_settings.gift_card_form and product.gift_card? -%}
+            <span
+              class="product-form-text__error hidden"
+              ref="addToCartTextError"
+            >
+              <span class="svg-wrapper product-form-icon--error">
+                {{- 'icon-error.svg' | inline_asset_content -}}
+              </span>
+            </span>
+          {%- endunless -%}
+
+          {%- comment -%} Add to Cart Button {%- endcomment -%}
+          <div class="custom-buy-button__add-to-cart">
+            {% render 'add-to-cart-button',
+              id: 'CustomBuyButton-AddToCart-' | append: block.id,
+              class: 'custom-add-to-cart-button',
+              can_add_to_cart: can_add_to_cart,
+              product: product,
+              add_to_cart_text: add_to_cart_text,
+              data_testid: 'custom-add-to-cart'
+            %}
+          </div>
+
+          {%- comment -%} Buy It Now Button (Accelerated Checkout) {%- endcomment -%}
+          {% capture accelerated_checkout_button %}
+            {% if product != blank and form != blank %}
+              {{ form | payment_button }}
+            {% endif %}
+          {% endcapture %}
+
+          {% if accelerated_checkout_button != blank %}
+            <div
+              class="custom-buy-button__buy-now"
+              ref="acceleratedCheckoutButtonContainer"
+              {% unless can_add_to_cart %}
+                hidden
+              {% endunless %}
+            >
+              {{ accelerated_checkout_button }}
+            </div>
+          {% endif %}
+        </div>
+      {%- endform -%}
+    </product-form-component>
+  {%- else -%}
+    <div class="custom-buy-button-container">
+      <button
+        type="submit"
+        name="add"
+        class="custom-add-to-cart-button button"
+        disabled
+      >
+        {{ 'blocks.sold_out' | t }}
+      </button>
+    </div>
+  {%- endif -%}
+</span>
+
+{% stylesheet %}
+  .custom-buy-button-block {
+    width: 100%;
+  }
+
+  .custom-buy-button-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: var(--gap-sm);
+    align-items: stretch;
+  }
+
+  .custom-buy-button__add-to-cart,
+  .custom-buy-button__buy-now {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  /* Add to Cart Button Styling */
+  .custom-add-to-cart-button {
+    width: 100%;
+    padding-block: var(--padding-lg);
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: var(--corner-radius, 4px);
+    transition: all var(--animation-speed) var(--animation-easing);
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .custom-add-to-cart-button:not(:disabled) {
+    background-color: var(--color-primary);
+    color: #ffffff !important;
+  }
+
+  .custom-add-to-cart-button:not(:disabled):hover {
+    background-color: var(--color-primary-hover);
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Force white text color on all text elements */
+  .custom-add-to-cart-button:not(:disabled),
+  .custom-add-to-cart-button:not(:disabled) *,
+  .custom-add-to-cart-button:not(:disabled) .add-to-cart-text,
+  .custom-add-to-cart-button:not(:disabled) .add-to-cart-text *,
+  .custom-add-to-cart-button:not(:disabled) .add-to-cart-text__content,
+  .custom-add-to-cart-button:not(:disabled) .add-to-cart-text__content *,
+  .custom-add-to-cart-button:not(:disabled) .add-to-cart-text__content span,
+  .custom-add-to-cart-button:not(:disabled) .add-to-cart-text__content span span {
+    color: #ffffff !important;
+  }
+
+  .custom-add-to-cart-button:not(:disabled):hover,
+  .custom-add-to-cart-button:not(:disabled):hover *,
+  .custom-add-to-cart-button:not(:disabled):hover .add-to-cart-text,
+  .custom-add-to-cart-button:not(:disabled):hover .add-to-cart-text *,
+  .custom-add-to-cart-button:not(:disabled):hover .add-to-cart-text__content,
+  .custom-add-to-cart-button:not(:disabled):hover .add-to-cart-text__content *,
+  .custom-add-to-cart-button:not(:disabled):hover .add-to-cart-text__content span,
+  .custom-add-to-cart-button:not(:disabled):hover .add-to-cart-text__content span span {
+    color: #ffffff !important;
+  }
+
+  .custom-add-to-cart-button:disabled {
+    background-color: var(--color-border);
+    color: var(--color-foreground-secondary);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .custom-add-to-cart-button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Buy It Now Button Styling */
+  .custom-buy-button__buy-now {
+    position: relative;
+  }
+
+  .custom-buy-button__buy-now .shopify-payment-button {
+    width: 100%;
+    height: 100%;
+  }
+
+  .custom-buy-button__buy-now .shopify-payment-button__button {
+    width: 100% !important;
+    padding-block: var(--padding-lg) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    border-radius: var(--corner-radius, 4px) !important;
+    transition: all var(--animation-speed) var(--animation-easing) !important;
+    border: 1px solid var(--color-border) !important;
+    background-color: var(--color-background) !important;
+    color: var(--color-foreground) !important;
+    min-height: auto !important;
+  }
+
+  .custom-buy-button__buy-now .shopify-payment-button__button:hover {
+    background-color: var(--color-background) !important;
+    border-color: var(--color-foreground) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .custom-buy-button__buy-now .shopify-payment-button__button:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .custom-buy-button__buy-now .shopify-payment-button__more-options {
+    display: none;
+  }
+
+  /* Mobile adjustments */
+  @media screen and (max-width: 749px) {
+    .custom-buy-button-container {
+      flex-direction: column;
+      gap: var(--gap-xs);
+    }
+
+    .custom-add-to-cart-button,
+    .custom-buy-button__buy-now .shopify-payment-button__button {
+      padding-block: var(--padding-md);
+    }
+  }
+
+  /* Ensure buttons have consistent height */
+  .custom-buy-button__add-to-cart,
+  .custom-buy-button__buy-now {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .custom-buy-button__add-to-cart > *,
+  .custom-buy-button__buy-now > * {
+    width: 100%;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Custom Buy Button",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Custom buy button with Add to Cart and Buy It Now buttons in a horizontal layout."
+    },
+    {
+      "type": "checkbox",
+      "id": "gift_card_form",
+      "label": "Show gift card form",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,247 @@
+
+{% liquid
+  assign block_settings = block.settings
+%}
+
+<div
+  class="product-trust-badges spacing-style"
+  style="{% render 'spacing-style', settings: block_settings %}"
+  {{ block.shopify_attributes }}
+>
+  <div class="product-trust-badges__container">
+    {%- comment -%} Badge 1: Returns {%- endcomment -%}
+    {% if block_settings.badge_1_text != blank %}
+      <div class="product-trust-badge">
+        <div class="product-trust-badge__icon">
+          <span class="svg-wrapper product-trust-badge__icon-svg">
+            {{- 'icon-trust-returns.svg' | inline_asset_content -}}
+          </span>
+        </div>
+        <div class="product-trust-badge__text">
+          {{ block_settings.badge_1_text }}
+        </div>
+      </div>
+    {% endif %}
+
+    {%- comment -%} Badge 2: Quality Check {%- endcomment -%}
+    {% if block_settings.badge_2_text != blank %}
+      <div class="product-trust-badge">
+        <div class="product-trust-badge__icon">
+          <span class="svg-wrapper product-trust-badge__icon-svg">
+            {{- 'icon-trust-quality.svg' | inline_asset_content -}}
+          </span>
+        </div>
+        <div class="product-trust-badge__text">
+          {{ block_settings.badge_2_text }}
+        </div>
+      </div>
+    {% endif %}
+
+    {%- comment -%} Badge 3: Authentication {%- endcomment -%}
+    {% if block_settings.badge_3_text != blank %}
+      <div class="product-trust-badge">
+        <div class="product-trust-badge__icon">
+          <span class="svg-wrapper product-trust-badge__icon-svg">
+            {{- 'icon-trust-authenticated.svg' | inline_asset_content -}}
+          </span>
+        </div>
+        <div class="product-trust-badge__text">
+          {{ block_settings.badge_3_text }}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .product-trust-badges {
+    width: 100%;
+  }
+
+  .product-trust-badges__container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+
+  .product-trust-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-xs, 8px);
+    padding-inline: var(--padding-md, 16px);
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .product-trust-badge:first-child {
+    padding-inline-start: 0;
+  }
+
+  .product-trust-badge:last-child {
+    padding-inline-end: 0;
+  }
+
+  .product-trust-badge:not(:last-child) {
+    border-right: 1px solid var(--color-border, #e5e5e5);
+  }
+
+  .product-trust-badge__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+  }
+
+  .product-trust-badge__icon-svg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: var(--color-foreground, #000);
+  }
+
+  .product-trust-badge__icon-svg svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+  }
+
+  .product-trust-badge__icon-svg svg path,
+  .product-trust-badge__icon-svg svg circle {
+    stroke: currentColor;
+    stroke-width: 1;
+  }
+
+  .product-trust-badge__text {
+    font-size: var(--font-size--sm, 0.875rem);
+    font-weight: 400;
+    color: var(--color-foreground, #000);
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Mobile adjustments */
+  @media screen and (max-width: 749px) {
+    .product-trust-badges__container {
+      flex-wrap: wrap;
+    }
+
+    .product-trust-badge {
+      flex: 1 1 calc(50% - 1px);
+      min-width: 0;
+      padding-inline: var(--padding-sm, 12px);
+    }
+
+    .product-trust-badge:nth-child(2) {
+      border-right: none;
+    }
+
+    .product-trust-badge:not(:last-child):not(:nth-child(2)) {
+      border-right: 1px solid var(--color-border, #e5e5e5);
+    }
+
+    .product-trust-badge:nth-child(-n+2) {
+      border-bottom: 1px solid var(--color-border, #e5e5e5);
+      padding-block-end: var(--padding-xs, 8px);
+    }
+
+    .product-trust-badge:nth-child(n+3) {
+      padding-block-start: var(--padding-xs, 8px);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product Trust Badges",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Badge 1"
+    },
+    {
+      "type": "text",
+      "id": "badge_1_text",
+      "label": "Text",
+      "default": "Easy 30 day returns"
+    },
+    {
+      "type": "header",
+      "content": "Badge 2"
+    },
+    {
+      "type": "text",
+      "id": "badge_2_text",
+      "label": "Text",
+      "default": "Every item is quality checked"
+    },
+    {
+      "type": "header",
+      "content": "Badge 3"
+    },
+    {
+      "type": "text",
+      "id": "badge_3_text",
+      "label": "Text",
+      "default": "Authenticated by our expert team"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}
+
