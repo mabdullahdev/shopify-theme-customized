@@ -1,9 +1,9 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div class="section section--{{ section.settings.section_width }}-margin section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
-  <div class="men-page-header spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
-    <div class="men-page-header__inner">
-      <h3 class="men-page-header__title">{{ page.title | upcase }}</h3>
-      <a href="{{ section.settings.link_url }}" class="men-page-header__link">
+  <div class="shop-page-header spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+    <div class="shop-page-header__inner">
+      <h3 class="shop-page-header__title">{{ page.title | upcase }}</h3>
+      <a href="{{ section.settings.link_url }}" class="shop-page-header__link">
         {{ section.settings.link_text }}
       </a>
     </div>
@@ -11,49 +11,49 @@
 </div>
 
 {% stylesheet %}
-  .men-page-header {
+  .shop-page-header {
     padding-block: var(--padding-lg);
   }
 
-  .men-page-header__inner {
+  .shop-page-header__inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
   }
 
-  .men-page-header__title {
+  .shop-page-header__title {
     margin: 0;
     text-transform: uppercase;
   }
 
-  .men-page-header__link {
+  .shop-page-header__link {
     text-decoration: none;
     color: var(--color-foreground);
     transition: color var(--animation-speed) var(--animation-easing);
   }
 
-  .men-page-header__link:hover {
+  .shop-page-header__link:hover {
     color: var(--color-foreground);
     opacity: 0.8;
   }
 
   @media screen and (max-width: 749px) {
-    .men-page-header {
+    .shop-page-header {
       padding-block: clamp(1.5rem, 4vh, 2.5rem);
     }
 
-    .men-page-header__inner {
+    .shop-page-header__inner {
       flex-direction: column;
       align-items: flex-start;
       gap: 0.75rem;
     }
 
-    .men-page-header__title {
+    .shop-page-header__title {
       font-size: clamp(1.25rem, 5vw, 1.5rem);
     }
 
-    .men-page-header__link {
+    .shop-page-header__link {
       font-size: 0.875rem;
     }
   }
@@ -61,7 +61,7 @@
 
 {% schema %}
 {
-  "name": "Men's Page Header",
+  "name": "Shop's Page Header",
   "class": "section-wrapper",
   "settings": [
     {

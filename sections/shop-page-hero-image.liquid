@@ -1,7 +1,7 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
   <div
-    class="men-hero spacing-style"
+    class="shop-hero spacing-style"
     style="
       {% render 'spacing-style', settings: section.settings %}
       {% if section.settings.background_image != blank %}
@@ -30,10 +30,10 @@
       --shop-hero-background-color: {{ bg_color }};
     "
   >
-    <div class="men-hero__overlay"></div>
-    <div class="men-hero__inner">
+    <div class="shop-hero__overlay"></div>
+    <div class="shop-hero__inner">
       {% if section.settings.heading != blank %}
-        <h1 class="men-hero__title">
+        <h1 class="shop-hero__title">
           {% assign heading_parts = section.settings.heading | split: ' PRE-LOVED' %}
           {% if heading_parts.size > 1 %}
             {{ heading_parts[0] }}<br>PRE-LOVED{{ heading_parts[1] }}
@@ -44,15 +44,15 @@
       {% endif %}
 
       {% if section.settings.subheading != blank %}
-        <p class="men-hero__subtitle">
+        <p class="shop-hero__subtitle">
           {{ section.settings.subheading }}
         </p>
       {% endif %}
 
       {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-        <a href="{{ section.settings.button_link }}" class="men-hero__button">
+        <a href="{{ section.settings.button_link }}" class="shop-hero__button">
           <span>{{ section.settings.button_label }}</span>
-          <span class="men-hero__button-icon">→</span>
+          <span class="shop-hero__button-icon">→</span>
         </a>
       {% endif %}
     </div>
@@ -60,7 +60,7 @@
 </div>
 
 {% stylesheet %}
-  .men-hero {
+  .shop-hero {
     position: relative;
     min-height: 375px;
     display: flex;
@@ -76,21 +76,21 @@
     overflow: hidden;
   }
 
-  .men-hero__overlay {
+  .shop-hero__overlay {
     position: absolute;
     inset: 0;
     background: transparent;
     pointer-events: none;
   }
 
-  .men-hero__inner {
+  .shop-hero__inner {
     position: relative;
     z-index: 1;
     max-width: min(56rem, 100%);
     text-align: center;
   }
 
-  .men-hero__title {
+  .shop-hero__title {
     margin: 0 0 0.75rem;
     font-family: var(--font-heading--family, inherit);
     font-weight: 800;
@@ -100,12 +100,12 @@
     line-height: 1;
   }
 
-  .men-hero__subtitle {
+  .shop-hero__subtitle {
     margin: 0 0 1.5rem;
     font-size: clamp(0.75rem, 2vw, .875rem);
   }
 
-  .men-hero__button {
+  .shop-hero__button {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -123,40 +123,40 @@
       color var(--animation-speed) var(--animation-easing);
   }
 
-  .men-hero__button-icon {
+  .shop-hero__button-icon {
     display: inline-block;
     transform: translateY(1px);
   }
 
-  .men-hero__button:hover {
+  .shop-hero__button:hover {
     background-color: var(--color-foreground, #000);
     color: var(--color-background, #fff);
   }
 
   @media screen and (max-width: 749px) {
-    .men-hero {
+    .shop-hero {
       padding-inline: var(--padding-inline, 1.25rem);
       padding-block: clamp(2rem, 5vh, 3rem);
       min-height: auto;
       background-image: none;
     }
 
-    .men-hero__inner {
+    .shop-hero__inner {
       align-items: center;
       text-align: center;
     }
 
-    .men-hero__title {
+    .shop-hero__title {
       font-size: clamp(1.5rem, 6vw, 2rem);
       margin-bottom: 0.5rem;
     }
 
-    .men-hero__subtitle {
+    .shop-hero__subtitle {
       font-size: clamp(0.75rem, 2.5vw, 0.875rem);
       margin-bottom: 1.25rem;
     }
 
-    .men-hero__button {
+    .shop-hero__button {
       padding: 0.625rem 1.25rem;
       font-size: 0.75rem;
       letter-spacing: 0.08em;
@@ -164,12 +164,12 @@
   }
 
   @media screen and (max-width: 480px) {
-    .men-hero {
+    .shop-hero {
       min-height: auto;
       padding-block: clamp(1.5rem, 4vh, 2.5rem);
     }
 
-    .men-hero__button {
+    .shop-hero__button {
       padding: 0.5rem 1rem;
       font-size: 0.7rem;
       letter-spacing: 0.06em;
@@ -179,7 +179,7 @@
 
 {% schema %}
 {
-  "name": "Men's Hero Banner",
+  "name": "Shop's Hero Banner",
   "class": "section-wrapper",
   "settings": [
     {

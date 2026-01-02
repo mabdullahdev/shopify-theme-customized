@@ -1,5 +1,5 @@
 {%- doc -%}
-  Renders a category card for men's categories section.
+  Renders a category card for shop's categories section.
 
   @param {object} block - The block object
   @param {object} section - The section object
@@ -7,11 +7,11 @@
 
 {% assign image = block.settings.image %}
 <a
-  class="men-categories__card"
+  class="shop-categories__card"
   href="{{ block.settings.link | default: '#' }}"
   {{ block.shopify_attributes }}
 >
-  <div class="men-categories__media{% if image == blank %} men-categories__media--placeholder{% endif %}">
+  <div class="shop-categories__media{% if image == blank %} shop-categories__media--placeholder{% endif %}">
     {% if image != blank %}
       {{ image | image_url: width: 600 | image_tag:
         loading: 'lazy',
@@ -20,16 +20,16 @@
         alt: block.settings.title
       }}
     {% else %}
-      <div class="men-categories__placeholder">
-        <span class="men-categories__placeholder-label">
+      <div class="shop-categories__placeholder">
+        <span class="shop-categories__placeholder-label">
           {{ block.settings.title | default: 'Category' }}
         </span>
       </div>
     {% endif %}
   </div>
 
-  <div class="men-categories__label">
-    <span class="men-categories__name">
+  <div class="shop-categories__label">
+    <span class="shop-categories__name">
       {{ block.settings.title }}
     </span>
   </div>

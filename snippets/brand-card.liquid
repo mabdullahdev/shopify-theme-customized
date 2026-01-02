@@ -1,5 +1,5 @@
 {%- doc -%}
-  Renders a brand card for men's brands section.
+  Renders a brand card for shop's brands section.
 
   @param {object} block - The block object
   @param {object} section - The section object
@@ -8,11 +8,11 @@
 {% assign image = block.settings.image %}
 {% assign brand_name = block.settings.brand_name | default: '' %}
 <a
-  class="men-brands__card"
+  class="shop-brands__card"
   href="{{ block.settings.link | default: '#' }}"
   {{ block.shopify_attributes }}
 >
-  <div class="men-brands__media{% if image == blank %} men-brands__media--placeholder{% endif %}">
+  <div class="shop-brands__media{% if image == blank %} shop-brands__media--placeholder{% endif %}">
     {% if image != blank %}
       {{ image | image_url: width: 400 | image_tag:
         loading: 'lazy',
@@ -21,8 +21,8 @@
         alt: brand_name | default: 'Brand logo'
       }}
     {% else %}
-      <div class="men-brands__placeholder">
-        <span class="men-brands__placeholder-label">
+      <div class="shop-brands__placeholder">
+        <span class="shop-brands__placeholder-label">
           {{ brand_name | default: 'Brand' }}
         </span>
       </div>

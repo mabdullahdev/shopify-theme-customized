@@ -1,19 +1,19 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
   <div
-    class="men-categories spacing-style"
+    class="shop-categories spacing-style"
     style="{% render 'spacing-style', settings: section.settings %}"
   >
     {% if section.settings.heading != blank or section.settings.subheading != blank %}
-      <div class="men-categories__header">
+      <div class="shop-categories__header">
         {% if section.settings.heading != blank %}
-          <h2 class="men-categories__title">
+          <h2 class="shop-categories__title">
             {{ section.settings.heading }}
           </h2>
         {% endif %}
 
         {% if section.settings.subheading != blank %}
-          <p class="men-categories__subtitle">
+          <p class="shop-categories__subtitle">
             {{ section.settings.subheading }}
           </p>
         {% endif %}
@@ -21,7 +21,7 @@
     {% endif %}
 
     {% if section.blocks.size > 0 %}
-      <div class="men-categories__grid">
+      <div class="shop-categories__grid">
         {% for block in section.blocks %}
           {% render 'category-card', block: block, section: section %}
         {% endfor %}
@@ -31,11 +31,11 @@
 </div>
 
 {% stylesheet %}
-  .men-categories {
+  .shop-categories {
     padding-block: clamp(2rem, 4vh, 3rem);
   }
 
-  .men-categories__header {
+  .shop-categories__header {
     max-width: var(--page-width);
     margin-inline: auto;
     margin-bottom: 1.25rem;
@@ -44,20 +44,20 @@
     gap: 0.35rem;
   }
 
-  .men-categories__title {
+  .shop-categories__title {
     margin: 0;
     font-size: clamp(1.75rem, 3vw, 2.25rem);
     text-transform: uppercase;
   }
 
-  .men-categories__subtitle {
+  .shop-categories__subtitle {
     margin: 0;
     max-width: 32rem;
     font-size: 0.95rem;
     color: rgb(0 0 0 / 0.7);
   }
 
-  .men-categories__grid {
+  .shop-categories__grid {
     max-width: var(--page-width);
     margin-inline: auto;
     display: grid;
@@ -65,7 +65,7 @@
     gap: 0.75rem;
   }
 
-  .men-categories__card {
+  .shop-categories__card {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -75,43 +75,43 @@
     transition: opacity var(--animation-speed) var(--animation-easing);
   }
 
-  .men-categories__card:hover {
+  .shop-categories__card:hover {
     opacity: 0.8;
   }
 
-  .men-categories__media {
+  .shop-categories__media {
     position: relative;
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background-color: #f5f5f5;
   }
 
-  .men-categories__media img {
+  .shop-categories__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .men-categories__media--placeholder {
+  .shop-categories__media--placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
   }
 
-  .men-categories__placeholder {
+  .shop-categories__placeholder {
     padding: 0.75rem 1rem;
     border-radius: 999px;
     background: rgb(255 255 255 / 0.9);
   }
 
-  .men-categories__placeholder-label {
+  .shop-categories__placeholder-label {
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
 
-  .men-categories__label {
+  .shop-categories__label {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -119,7 +119,7 @@
     text-align: center;
   }
 
-  .men-categories__name {
+  .shop-categories__name {
     font-weight: 700;
     font-size: 0.875rem;
     text-transform: uppercase;
@@ -127,42 +127,42 @@
   }
 
   @media screen and (max-width: 999px) {
-    .men-categories__grid {
+    .shop-categories__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0.625rem;
     }
   }
 
   @media screen and (max-width: 749px) {
-    .men-categories {
+    .shop-categories {
       padding-block: clamp(2rem, 4vh, 3rem);
     }
 
-    .men-categories__header {
+    .shop-categories__header {
       margin-bottom: 1.25rem;
       text-align: left;
     }
 
-    .men-categories__title {
+    .shop-categories__title {
       font-size: clamp(1.5rem, 4vw, 1.75rem);
     }
 
-    .men-categories__subtitle {
+    .shop-categories__subtitle {
       font-size: 0.875rem;
     }
 
-    .men-categories__grid {
+    .shop-categories__grid {
       grid-template-columns: minmax(0, 1fr);
       gap: 0.75rem;
     }
   }
 
   @media screen and (max-width: 480px) {
-    .men-categories__header {
+    .shop-categories__header {
       margin-bottom: 1rem;
     }
 
-    .men-categories__grid {
+    .shop-categories__grid {
       gap: 0.625rem;
     }
   }
@@ -170,7 +170,7 @@
 
 {% schema %}
 {
-  "name": "Men's Categories Grid",
+  "name": "Shop's Categories Grid",
   "class": "section-wrapper",
   "settings": [
     {

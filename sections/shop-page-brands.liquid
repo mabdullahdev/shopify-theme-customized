@@ -1,19 +1,19 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
   <div
-    class="men-brands spacing-style"
+    class="shop-brands spacing-style"
     style="{% render 'spacing-style', settings: section.settings %}"
   >
     {% if section.settings.heading != blank or section.settings.subheading != blank %}
-      <div class="men-brands__header">
+      <div class="shop-brands__header">
         {% if section.settings.heading != blank %}
-          <h2 class="men-brands__title">
+          <h2 class="shop-brands__title">
             {{ section.settings.heading }}
           </h2>
         {% endif %}
 
         {% if section.settings.subheading != blank %}
-          <p class="men-brands__subtitle">
+          <p class="shop-brands__subtitle">
             {{ section.settings.subheading }}
           </p>
         {% endif %}
@@ -21,17 +21,17 @@
     {% endif %}
 
     {% if section.blocks.size > 0 %}
-      <div class="men-brands__grid">
+      <div class="shop-brands__grid">
         {% for block in section.blocks %}
           {% render 'brand-card', block: block, section: section %}
         {% endfor %}
       </div>
     {% endif %}
 
-    <div class="men-brands__footer">
-      <a href="{{ section.settings.view_all_link }}" class="men-brands__view-all">
+    <div class="shop-brands__footer">
+      <a href="{{ section.settings.view_all_link }}" class="shop-brands__view-all">
         {{ section.settings.view_all_text | default: 'View all brands' }}
-        <svg class="men-brands__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="shop-brands__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
@@ -40,11 +40,11 @@
 </div>
 
 {% stylesheet %}
-  .men-brands {
+  .shop-brands {
     padding-block: clamp(2rem, 4vh, 3rem);
   }
 
-  .men-brands__header {
+  .shop-brands__header {
     max-width: var(--page-width);
     margin-inline: auto;
     margin-bottom: 1.5rem;
@@ -53,20 +53,20 @@
     gap: 0.35rem;
   }
 
-  .men-brands__title {
+  .shop-brands__title {
     margin: 0;
     font-size: clamp(1.75rem, 3vw, 2.25rem);
     text-transform: uppercase;
   }
 
-  .men-brands__subtitle {
+  .shop-brands__subtitle {
     margin: 0;
     max-width: 32rem;
     font-size: 0.95rem;
     color: rgb(0 0 0 / 0.7);
   }
 
-  .men-brands__grid {
+  .shop-brands__grid {
     max-width: var(--page-width);
     margin-inline: auto;
     display: grid;
@@ -74,7 +74,7 @@
     gap: 0.75rem;
   }
 
-  .men-brands__card {
+  .shop-brands__card {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -84,11 +84,11 @@
     transition: opacity var(--animation-speed) var(--animation-easing);
   }
 
-  .men-brands__card:hover {
+  .shop-brands__card:hover {
     opacity: 0.8;
   }
 
-  .men-brands__media {
+  .shop-brands__media {
     position: relative;
     aspect-ratio: 1 / 1;
     overflow: hidden;
@@ -98,29 +98,29 @@
     justify-content: center;
   }
 
-  .men-brands__media img {
+  .shop-brands__media img {
     width: 100%;
     height: 100%;
     object-fit: contain;
   }
 
-  .men-brands__media--placeholder {
+  .shop-brands__media--placeholder {
     background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
   }
 
-  .men-brands__placeholder {
+  .shop-brands__placeholder {
     padding: 0.75rem 1rem;
     border-radius: 999px;
     background: rgb(255 255 255 / 0.9);
   }
 
-  .men-brands__placeholder-label {
+  .shop-brands__placeholder-label {
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
 
-  .men-brands__footer {
+  .shop-brands__footer {
     max-width: var(--page-width);
     margin-inline: auto;
     margin-top: 2rem;
@@ -128,7 +128,7 @@
     align-items: center;
   }
 
-  .men-brands__view-all {
+  .shop-brands__view-all {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -141,56 +141,56 @@
     transition: opacity var(--animation-speed) var(--animation-easing);
   }
 
-  .men-brands__view-all:hover {
+  .shop-brands__view-all:hover {
     opacity: 0.8;
   }
 
-  .men-brands__arrow {
+  .shop-brands__arrow {
     flex-shrink: 0;
   }
 
   @media screen and (max-width: 999px) {
-    .men-brands__grid {
+    .shop-brands__grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0.625rem;
     }
   }
 
   @media screen and (max-width: 749px) {
-    .men-brands {
+    .shop-brands {
       padding-block: clamp(2rem, 4vh, 3rem);
     }
 
-    .men-brands__header {
+    .shop-brands__header {
       margin-bottom: 1.25rem;
       text-align: left;
     }
 
-    .men-brands__title {
+    .shop-brands__title {
       font-size: clamp(1.5rem, 4vw, 1.75rem);
     }
 
-    .men-brands__subtitle {
+    .shop-brands__subtitle {
       font-size: 0.875rem;
     }
 
-    .men-brands__grid {
+    .shop-brands__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0.75rem;
     }
 
-    .men-brands__footer {
+    .shop-brands__footer {
       margin-top: 1.5rem;
     }
   }
 
   @media screen and (max-width: 480px) {
 
-    .men-brands__header {
+    .shop-brands__header {
       margin-bottom: 1rem;
     }
 
-    .men-brands__grid {
+    .shop-brands__grid {
       grid-template-columns: minmax(0, 1fr);
       gap: 0.625rem;
     }
@@ -199,7 +199,7 @@
 
 {% schema %}
 {
-  "name": "Men's Brands Grid",
+  "name": "Shop's Brands Grid",
   "class": "section-wrapper",
   "settings": [
     {
