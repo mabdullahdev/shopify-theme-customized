@@ -1,11 +1,14 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
   <div
-    class="shop-hero spacing-style"
+    class="shop-hero shop-hero--{{ section.settings.content_position }} spacing-style"
     style="
       {% render 'spacing-style', settings: section.settings %}
       {% if section.settings.background_image != blank %}
         --shop-hero-background-image: url('{{ section.settings.background_image | image_url: width: 2400 }}');
+      {% endif %}
+      {% if section.settings.mobile_background_image != blank %}
+        --shop-hero-mobile-background-image: url('{{ section.settings.mobile_background_image | image_url: width: 800 }}');
       {% endif %}
       {%- liquid
         assign bg_color = section.settings.background_color | default: '#F2F3ED'
@@ -28,12 +31,25 @@
         endcase
       -%}
       --shop-hero-background-color: {{ bg_color }};
+      --shop-hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
     "
+    {% if section.settings.enable_animations %}
+      data-hero-animate
+    {% endif %}
   >
-    <div class="shop-hero__overlay"></div>
-    <div class="shop-hero__inner">
+    {% if section.settings.enable_overlay %}
+      <div class="shop-hero__overlay shop-hero__overlay--{{ section.settings.overlay_style }}"></div>
+    {% endif %}
+
+    <div class="shop-hero__inner shop-hero__inner--{{ section.settings.text_alignment }}">
+      {% if section.settings.badge_text != blank %}
+        <span class="shop-hero__badge" data-animate-item>
+          {{ section.settings.badge_text }}
+        </span>
+      {% endif %}
+
       {% if section.settings.heading != blank %}
-        <h1 class="shop-hero__title">
+        <h1 class="shop-hero__title" data-animate-item>
           {% assign heading_parts = section.settings.heading | split: ' PRE-LOVED' %}
           {% if heading_parts.size > 1 %}
             {{ heading_parts[0] }}<br>PRE-LOVED{{ heading_parts[1] }}
@@ -44,28 +60,56 @@
       {% endif %}
 
       {% if section.settings.subheading != blank %}
-        <p class="shop-hero__subtitle">
+        <p class="shop-hero__subtitle" data-animate-item>
           {{ section.settings.subheading }}
         </p>
       {% endif %}
 
       {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-        <a href="{{ section.settings.button_link }}" class="shop-hero__button">
+        <a href="{{ section.settings.button_link }}" class="shop-hero__button" data-animate-item>
           <span>{{ section.settings.button_label }}</span>
-          <span class="shop-hero__button-icon">→</span>
+          <span class="shop-hero__button-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
         </a>
       {% endif %}
     </div>
   </div>
 </div>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const hero = document.querySelector('[data-hero-animate]');
+    if (!hero) return;
+
+    const items = hero.querySelectorAll('[data-animate-item]');
+
+    // Use Intersection Observer for animation trigger
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          items.forEach((item, index) => {
+            setTimeout(() => {
+              item.classList.add('is-visible');
+            }, index * 120);
+          });
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.2 });
+
+    observer.observe(hero);
+  });
+</script>
+
 {% stylesheet %}
   .shop-hero {
     position: relative;
-    min-height: 375px;
+    min-height: 420px;
     display: flex;
     align-items: center;
-    justify-content: center;
     padding-block: clamp(3rem, 6vh, 5rem);
     padding-inline: var(--page-margin);
     background-color: var(--shop-hero-background-color, #F2F3ED);
@@ -76,33 +120,88 @@
     overflow: hidden;
   }
 
+  /* Content position variants */
+  .shop-hero--left {
+    justify-content: flex-start;
+  }
+
+  .shop-hero--center {
+    justify-content: center;
+  }
+
+  .shop-hero--right {
+    justify-content: flex-end;
+  }
+
+  /* Overlay styles */
   .shop-hero__overlay {
     position: absolute;
     inset: 0;
-    background: transparent;
     pointer-events: none;
+    opacity: var(--shop-hero-overlay-opacity, 0.3);
+  }
+
+  .shop-hero__overlay--gradient-left {
+    background: linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+  }
+
+  .shop-hero__overlay--gradient-right {
+    background: linear-gradient(270deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+  }
+
+  .shop-hero__overlay--gradient-center {
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, transparent 70%);
+  }
+
+  .shop-hero__overlay--solid {
+    background: rgba(0,0,0,1);
   }
 
   .shop-hero__inner {
     position: relative;
     z-index: 1;
-    max-width: min(56rem, 100%);
+    max-width: min(32rem, 100%);
+  }
+
+  .shop-hero__inner--left {
+    text-align: left;
+  }
+
+  .shop-hero__inner--center {
     text-align: center;
+  }
+
+  .shop-hero__inner--right {
+    text-align: right;
+  }
+
+  /* Badge */
+  .shop-hero__badge {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+    padding: 0.375rem 0.875rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background-color: var(--color-foreground, #000);
+    color: var(--color-background, #fff);
   }
 
   .shop-hero__title {
     margin: 0 0 0.75rem;
     font-family: var(--font-heading--family, inherit);
     font-weight: 800;
-    font-size: clamp(2.25rem, 4vw, 3rem);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
     letter-spacing: 0.02em;
     text-transform: uppercase;
     line-height: 1;
   }
 
   .shop-hero__subtitle {
-    margin: 0 0 1.5rem;
-    font-size: clamp(0.75rem, 2vw, .875rem);
+    margin: 0 0 1.75rem;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    opacity: 0.85;
   }
 
   .shop-hero__button {
@@ -112,52 +211,78 @@
     padding: 0.875rem 1.75rem;
     border-radius: 0;
     font-weight: 600;
+    font-size: 0.85rem;
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    background-color: transparent;
-    color: var(--color-foreground, #000);
+    background-color: var(--color-foreground, #000);
+    color: var(--color-background, #fff);
     border: 1.5px solid var(--color-foreground, #000);
-    transition:
-      background-color var(--animation-speed) var(--animation-easing),
-      color var(--animation-speed) var(--animation-easing);
+    transition: all 0.3s ease;
   }
 
   .shop-hero__button-icon {
-    display: inline-block;
-    transform: translateY(1px);
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.3s ease;
   }
 
   .shop-hero__button:hover {
-    background-color: var(--color-foreground, #000);
-    color: var(--color-background, #fff);
+    background-color: transparent;
+    color: var(--color-foreground, #000);
   }
+
+  .shop-hero__button:hover .shop-hero__button-icon {
+    transform: translateX(4px);
+  }
+
+  /* Entrance animations */
+  [data-hero-animate] [data-animate-item] {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  [data-hero-animate] [data-animate-item].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Staggered animation delays handled by JS */
 
   @media screen and (max-width: 749px) {
     .shop-hero {
+      min-height: 320px;
       padding-inline: var(--padding-inline, 1.25rem);
-      padding-block: clamp(2rem, 5vh, 3rem);
-      min-height: auto;
-      background-image: none;
+      padding-block: clamp(2.5rem, 5vh, 3.5rem);
+      justify-content: center;
+      background-image: var(--shop-hero-mobile-background-image, none);
+      background-size: cover;
+      background-position: center;
     }
 
     .shop-hero__inner {
-      align-items: center;
       text-align: center;
+      max-width: 100%;
+    }
+
+    .shop-hero__badge {
+      font-size: 0.65rem;
+      padding: 0.3rem 0.75rem;
     }
 
     .shop-hero__title {
-      font-size: clamp(1.5rem, 6vw, 2rem);
+      font-size: clamp(1.75rem, 7vw, 2.25rem);
       margin-bottom: 0.5rem;
     }
 
     .shop-hero__subtitle {
-      font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+      font-size: clamp(0.8rem, 3vw, 0.9rem);
       margin-bottom: 1.25rem;
     }
 
     .shop-hero__button {
-      padding: 0.625rem 1.25rem;
+      padding: 0.75rem 1.5rem;
       font-size: 0.75rem;
       letter-spacing: 0.08em;
     }
@@ -165,14 +290,17 @@
 
   @media screen and (max-width: 480px) {
     .shop-hero {
-      min-height: auto;
-      padding-block: clamp(1.5rem, 4vh, 2.5rem);
+      min-height: 280px;
+      padding-block: clamp(2rem, 4vh, 3rem);
+    }
+
+    .shop-hero__title {
+      font-size: clamp(1.5rem, 6vw, 1.75rem);
     }
 
     .shop-hero__button {
-      padding: 0.5rem 1rem;
+      padding: 0.625rem 1.25rem;
       font-size: 0.7rem;
-      letter-spacing: 0.06em;
     }
   }
 {% endstylesheet %}
@@ -183,32 +311,81 @@
   "class": "section-wrapper",
   "settings": [
     {
-      "type": "select",
-      "id": "section_width",
-      "label": "t:settings.width",
-      "options": [
-        {
-          "value": "page-width",
-          "label": "t:options.page"
-        },
-        {
-          "value": "full-width",
-          "label": "t:options.full"
-        }
-      ],
-      "default": "page-width"
+      "type": "header",
+      "content": "Images"
     },
     {
       "type": "image_picker",
       "id": "background_image",
-      "label": "Background image"
+      "label": "Desktop background image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_background_image",
+      "label": "Mobile background image",
+      "info": "Optional. If not set, mobile will show background color only."
     },
     {
       "type": "text",
       "id": "background_color",
       "label": "Background color",
       "default": "#F2F3ED",
-      "info": "Enter a CSS color value (hex, rgb, or color name like 'black', 'white', etc.)"
+      "info": "Hex code or color name (black, white, yellow, etc.)"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlay",
+      "label": "Enable overlay",
+      "default": false,
+      "info": "Adds a gradient or solid overlay for better text readability"
+    },
+    {
+      "type": "select",
+      "id": "overlay_style",
+      "label": "Overlay style",
+      "options": [
+        {
+          "value": "gradient-left",
+          "label": "Gradient from left"
+        },
+        {
+          "value": "gradient-right",
+          "label": "Gradient from right"
+        },
+        {
+          "value": "gradient-center",
+          "label": "Gradient center"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        }
+      ],
+      "default": "gradient-left"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 10,
+      "max": 90,
+      "step": 10,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "info": "Optional. Shows above heading (e.g., 'NEW', 'SALE')"
     },
     {
       "type": "text",
@@ -232,6 +409,76 @@
       "type": "url",
       "id": "button_link",
       "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Content position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animations",
+      "label": "Enable entrance animations",
+      "default": true
     },
     {
       "type": "color_scheme",
@@ -266,5 +513,3 @@
   ]
 }
 {% endschema %}
-
-

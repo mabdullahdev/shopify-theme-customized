@@ -3,6 +3,7 @@
   <div
     class="shop-brands spacing-style"
     style="{% render 'spacing-style', settings: section.settings %}"
+    {% if section.settings.enable_animations %}data-brands-animate{% endif %}
   >
     {% if section.settings.heading != blank or section.settings.subheading != blank %}
       <div class="shop-brands__header">
@@ -21,23 +22,70 @@
     {% endif %}
 
     {% if section.blocks.size > 0 %}
-      <div class="shop-brands__grid">
+      {% liquid
+        assign grid_class = 'shop-brands__grid'
+        if section.settings.mobile_carousel
+          assign grid_class = grid_class | append: ' shop-brands__grid--mobile-carousel'
+        endif
+        if section.settings.grayscale_hover
+          assign grid_class = grid_class | append: ' shop-brands__grid--grayscale'
+        endif
+      %}
+      <div
+        class="{{ grid_class }}"
+        style="
+          --brand-columns: {{ section.settings.columns }};
+          --brand-columns-tablet: {{ section.settings.columns_tablet }};
+          --brand-columns-mobile: {{ section.settings.columns_mobile }};
+        "
+      >
         {% for block in section.blocks %}
-          {% render 'brand-card', block: block, section: section %}
+          {% render 'brand-card',
+            block: block,
+            section: section,
+            show_name: section.settings.show_brand_name,
+            card_style: section.settings.card_style
+          %}
         {% endfor %}
       </div>
     {% endif %}
 
-    <div class="shop-brands__footer">
-      <a href="{{ section.settings.view_all_link }}" class="shop-brands__view-all">
-        {{ section.settings.view_all_text | default: 'View all brands' }}
-        <svg class="shop-brands__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
-    </div>
+    {% if section.settings.view_all_link != blank %}
+      <div class="shop-brands__footer">
+        <a href="{{ section.settings.view_all_link }}" class="shop-brands__view-all">
+          {{ section.settings.view_all_text | default: 'View all brands' }}
+          <svg class="shop-brands__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {% endif %}
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.querySelector('[data-brands-animate]');
+    if (!section) return;
+
+    const cards = section.querySelectorAll('.shop-brands__card');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          cards.forEach((card, index) => {
+            setTimeout(() => {
+              card.classList.add('is-visible');
+            }, index * 50);
+          });
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.1 });
+
+    observer.observe(section);
+  });
+</script>
 
 {% stylesheet %}
   .shop-brands {
@@ -70,10 +118,11 @@
     max-width: var(--page-width);
     margin-inline: auto;
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--brand-columns, 6), minmax(0, 1fr));
     gap: 0.75rem;
   }
 
+  /* Brand Card Styles */
   .shop-brands__card {
     position: relative;
     display: flex;
@@ -81,11 +130,27 @@
     text-decoration: none;
     color: inherit;
     overflow: hidden;
-    transition: opacity var(--animation-speed) var(--animation-easing);
+    transition: transform 0.3s ease;
   }
 
   .shop-brands__card:hover {
-    opacity: 0.8;
+    transform: translateY(-4px);
+  }
+
+  /* Animation initial state */
+  [data-brands-animate] .shop-brands__card {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  [data-brands-animate] .shop-brands__card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  [data-brands-animate] .shop-brands__card.is-visible:hover {
+    transform: translateY(-4px);
   }
 
   .shop-brands__media {
@@ -96,12 +161,49 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 1rem;
+    transition: transform 0.3s ease;
   }
 
   .shop-brands__media img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    transition: filter 0.3s ease, transform 0.3s ease;
+  }
+
+  /* Grayscale hover effect */
+  .shop-brands__grid--grayscale .shop-brands__media img {
+    filter: grayscale(100%);
+    opacity: 0.7;
+  }
+
+  .shop-brands__grid--grayscale .shop-brands__card:hover .shop-brands__media img {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  /* Non-grayscale hover */
+  .shop-brands__grid:not(.shop-brands__grid--grayscale) .shop-brands__card:hover .shop-brands__media img {
+    transform: scale(1.05);
+  }
+
+  /* Card style variants */
+  .shop-brands__card--bordered .shop-brands__media {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shop-brands__card--rounded .shop-brands__media {
+    border-radius: 8px;
+  }
+
+  .shop-brands__card--shadow .shop-brands__media {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .shop-brands__card--shadow:hover .shop-brands__media {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
 
   .shop-brands__media--placeholder {
@@ -115,9 +217,21 @@
   }
 
   .shop-brands__placeholder-label {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
+  }
+
+  /* Brand name below logo */
+  .shop-brands__name {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: rgba(0, 0, 0, 0.7);
   }
 
   .shop-brands__footer {
@@ -136,29 +250,56 @@
     color: var(--color-foreground);
     font-size: 0.95rem;
     text-decoration: underline;
-    text-decoration-color: #000;
+    text-decoration-color: currentColor;
     text-underline-offset: 0.25rem;
-    transition: opacity var(--animation-speed) var(--animation-easing);
+    transition: opacity 0.2s ease;
   }
 
   .shop-brands__view-all:hover {
-    opacity: 0.8;
+    opacity: 0.7;
   }
 
   .shop-brands__arrow {
     flex-shrink: 0;
   }
 
+  /* Mobile carousel mode */
+  @media screen and (max-width: 749px) {
+    .shop-brands__grid--mobile-carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      gap: 0.625rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .shop-brands__grid--mobile-carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .shop-brands__grid--mobile-carousel .shop-brands__card {
+      flex: 0 0 auto;
+      width: 28vw;
+      min-width: 100px;
+      max-width: 140px;
+      scroll-snap-align: start;
+    }
+  }
+
+  /* Responsive columns */
   @media screen and (max-width: 999px) {
-    .shop-brands__grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    .shop-brands__grid:not(.shop-brands__grid--mobile-carousel) {
+      grid-template-columns: repeat(var(--brand-columns-tablet, 4), minmax(0, 1fr));
       gap: 0.625rem;
     }
   }
 
   @media screen and (max-width: 749px) {
     .shop-brands {
-      padding-block: clamp(2rem, 4vh, 3rem);
+      padding-block: clamp(1.5rem, 4vh, 2.5rem);
     }
 
     .shop-brands__header {
@@ -174,25 +315,26 @@
       font-size: 0.875rem;
     }
 
-    .shop-brands__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.75rem;
+    .shop-brands__grid:not(.shop-brands__grid--mobile-carousel) {
+      grid-template-columns: repeat(var(--brand-columns-mobile, 3), minmax(0, 1fr));
+      gap: 0.5rem;
+    }
+
+    .shop-brands__media {
+      padding: 0.75rem;
+    }
+
+    .shop-brands__name {
+      font-size: 0.65rem;
+      margin-top: 0.375rem;
     }
 
     .shop-brands__footer {
       margin-top: 1.5rem;
     }
-  }
 
-  @media screen and (max-width: 480px) {
-
-    .shop-brands__header {
-      margin-bottom: 1rem;
-    }
-
-    .shop-brands__grid {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 0.625rem;
+    .shop-brands__card:hover {
+      transform: none;
     }
   }
 {% endstylesheet %}
@@ -203,20 +345,8 @@
   "class": "section-wrapper",
   "settings": [
     {
-      "type": "select",
-      "id": "section_width",
-      "label": "t:settings.width",
-      "options": [
-        {
-          "value": "page-width",
-          "label": "t:options.page"
-        },
-        {
-          "value": "full-width",
-          "label": "t:options.full"
-        }
-      ],
-      "default": "page-width"
+      "type": "header",
+      "content": "Content"
     },
     {
       "type": "text",
@@ -233,13 +363,134 @@
     {
       "type": "text",
       "id": "view_all_text",
-      "label": "View All Link Text",
+      "label": "View all link text",
       "default": "View all brands"
     },
     {
       "type": "url",
       "id": "view_all_link",
-      "label": "View All Link URL"
+      "label": "View all link URL"
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "checkbox",
+      "id": "grayscale_hover",
+      "label": "Grayscale to color on hover",
+      "default": true,
+      "info": "Logos appear gray until hovered"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_brand_name",
+      "label": "Show brand name below logo",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Card style",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "bordered",
+          "label": "Bordered"
+        },
+        {
+          "value": "rounded",
+          "label": "Rounded"
+        },
+        {
+          "value": "shadow",
+          "label": "Shadow"
+        },
+        {
+          "value": "bordered-rounded",
+          "label": "Bordered + Rounded"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "min": 4,
+      "max": 8,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "label": "Columns (tablet)",
+      "min": 3,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns (mobile)",
+      "options": [
+        {
+          "value": "2",
+          "label": "2 columns"
+        },
+        {
+          "value": "3",
+          "label": "3 columns"
+        },
+        {
+          "value": "4",
+          "label": "4 columns"
+        }
+      ],
+      "default": "3",
+      "info": "Only applies when mobile carousel is disabled"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_carousel",
+      "label": "Enable mobile carousel",
+      "default": true,
+      "info": "Brands scroll horizontally on mobile"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animations",
+      "label": "Enable entrance animations",
+      "default": true
     },
     {
       "type": "color_scheme",
@@ -280,19 +531,19 @@
         {
           "type": "text",
           "id": "brand_name",
-          "label": "Brand Name",
-          "info": "Optional brand name for accessibility and placeholder"
+          "label": "Brand name",
+          "info": "Used for accessibility and optional display"
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Brand Logo"
+          "label": "Brand logo"
         },
         {
           "type": "url",
           "id": "link",
           "label": "Link",
-          "info": "Optional link to brand page or collection"
+          "info": "Link to brand page or collection"
         }
       ]
     }
@@ -300,14 +551,20 @@
   "max_blocks": 24,
   "presets": [
     {
-      "name": "Men's brands grid",
+      "name": "Shop's Brands Grid",
+      "settings": {
+        "heading": "FROM ICONIC BRANDS TO TIMELESS CLASSICS.",
+        "subheading": "Handpicked and quality verified by us.",
+        "grayscale_hover": true,
+        "show_brand_name": false,
+        "card_style": "none",
+        "columns": 6,
+        "columns_tablet": 4,
+        "columns_mobile": "3",
+        "mobile_carousel": true,
+        "enable_animations": true
+      },
       "blocks": [
-        {
-          "type": "brand",
-          "settings": {
-            "brand_name": "Ralph Lauren"
-          }
-        },
         {
           "type": "brand",
           "settings": {
@@ -317,25 +574,31 @@
         {
           "type": "brand",
           "settings": {
-            "brand_name": "adidas"
+            "brand_name": "Adidas"
           }
         },
         {
           "type": "brand",
           "settings": {
-            "brand_name": "Barbour"
+            "brand_name": "Puma"
           }
         },
         {
           "type": "brand",
           "settings": {
-            "brand_name": "COS"
+            "brand_name": "Levi's"
           }
         },
         {
           "type": "brand",
           "settings": {
-            "brand_name": "ALLSAINTS"
+            "brand_name": "Zara"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "brand_name": "H&M"
           }
         }
       ]
@@ -343,4 +606,3 @@
   ]
 }
 {% endschema %}
-

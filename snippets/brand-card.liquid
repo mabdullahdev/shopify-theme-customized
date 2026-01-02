@@ -3,12 +3,29 @@
 
   @param {object} block - The block object
   @param {object} section - The section object
+  @param {boolean} show_name - Whether to show brand name below logo
+  @param {string} card_style - Card style variant (none, bordered, rounded, shadow, bordered-rounded)
 {%- enddoc -%}
 
-{% assign image = block.settings.image %}
-{% assign brand_name = block.settings.brand_name | default: '' %}
+{% liquid
+  assign image = block.settings.image
+  assign brand_name = block.settings.brand_name | default: ''
+
+  assign card_class = 'shop-brands__card'
+  case card_style
+    when 'bordered'
+      assign card_class = card_class | append: ' shop-brands__card--bordered'
+    when 'rounded'
+      assign card_class = card_class | append: ' shop-brands__card--rounded'
+    when 'shadow'
+      assign card_class = card_class | append: ' shop-brands__card--shadow'
+    when 'bordered-rounded'
+      assign card_class = card_class | append: ' shop-brands__card--bordered shop-brands__card--rounded'
+  endcase
+%}
+
 <a
-  class="shop-brands__card"
+  class="{{ card_class }}"
   href="{{ block.settings.link | default: '#' }}"
   {{ block.shopify_attributes }}
 >
@@ -17,7 +34,7 @@
       {{ image | image_url: width: 400 | image_tag:
         loading: 'lazy',
         widths: '200, 300, 400',
-        sizes: '(min-width: 1000px) calc(100vw / 6), (min-width: 750px) calc(100vw / 3), 50vw',
+        sizes: '(min-width: 1000px) calc(100vw / 6), (min-width: 750px) calc(100vw / 4), 28vw',
         alt: brand_name | default: 'Brand logo'
       }}
     {% else %}
@@ -28,5 +45,8 @@
       </div>
     {% endif %}
   </div>
-</a>
 
+  {% if show_name and brand_name != blank %}
+    <span class="shop-brands__name">{{ brand_name }}</span>
+  {% endif %}
+</a>

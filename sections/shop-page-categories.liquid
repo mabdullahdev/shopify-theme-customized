@@ -3,32 +3,88 @@
   <div
     class="shop-categories spacing-style"
     style="{% render 'spacing-style', settings: section.settings %}"
+    {% if section.settings.enable_animations %}data-categories-animate{% endif %}
   >
     {% if section.settings.heading != blank or section.settings.subheading != blank %}
       <div class="shop-categories__header">
-        {% if section.settings.heading != blank %}
-          <h2 class="shop-categories__title">
-            {{ section.settings.heading }}
-          </h2>
-        {% endif %}
+        <div class="shop-categories__header-text">
+          {% if section.settings.heading != blank %}
+            <h2 class="shop-categories__title">
+              {{ section.settings.heading }}
+            </h2>
+          {% endif %}
 
-        {% if section.settings.subheading != blank %}
-          <p class="shop-categories__subtitle">
-            {{ section.settings.subheading }}
-          </p>
+          {% if section.settings.subheading != blank %}
+            <p class="shop-categories__subtitle">
+              {{ section.settings.subheading }}
+            </p>
+          {% endif %}
+        </div>
+
+        {% if section.settings.view_all_link != blank %}
+          <a href="{{ section.settings.view_all_link }}" class="shop-categories__view-all">
+            {{ section.settings.view_all_text | default: 'View all' }}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
         {% endif %}
       </div>
     {% endif %}
 
     {% if section.blocks.size > 0 %}
-      <div class="shop-categories__grid">
+      {% liquid
+        assign grid_class = 'shop-categories__grid'
+        if section.settings.mobile_carousel
+          assign grid_class = grid_class | append: ' shop-categories__grid--mobile-carousel'
+        endif
+      %}
+      <div
+        class="{{ grid_class }}"
+        style="
+          --category-columns: {{ section.settings.columns }};
+          --category-columns-tablet: {{ section.settings.columns_tablet }};
+          --category-columns-mobile: {{ section.settings.columns_mobile }};
+          --category-aspect-ratio: {{ section.settings.aspect_ratio }};
+        "
+      >
         {% for block in section.blocks %}
-          {% render 'category-card', block: block, section: section %}
+          {% render 'category-card',
+            block: block,
+            section: section,
+            index: forloop.index,
+            text_style: section.settings.text_style,
+            show_arrow: section.settings.show_hover_arrow
+          %}
         {% endfor %}
       </div>
     {% endif %}
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.querySelector('[data-categories-animate]');
+    if (!section) return;
+
+    const cards = section.querySelectorAll('.shop-categories__card');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          cards.forEach((card, index) => {
+            setTimeout(() => {
+              card.classList.add('is-visible');
+            }, index * 100);
+          });
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.1 });
+
+    observer.observe(section);
+  });
+</script>
 
 {% stylesheet %}
   .shop-categories {
@@ -38,7 +94,14 @@
   .shop-categories__header {
     max-width: var(--page-width);
     margin-inline: auto;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+
+  .shop-categories__header-text {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
@@ -57,14 +120,31 @@
     color: rgb(0 0 0 / 0.7);
   }
 
+  .shop-categories__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none;
+    color: var(--color-foreground);
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+  }
+
+  .shop-categories__view-all:hover {
+    opacity: 0.7;
+  }
+
   .shop-categories__grid {
     max-width: var(--page-width);
     margin-inline: auto;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(var(--category-columns, 3), minmax(0, 1fr));
+    gap: 1rem;
   }
 
+  /* Category Card Styles */
   .shop-categories__card {
     position: relative;
     display: flex;
@@ -72,16 +152,33 @@
     text-decoration: none;
     color: inherit;
     overflow: hidden;
-    transition: opacity var(--animation-speed) var(--animation-easing);
+    border-radius: 4px;
+    transition: transform 0.3s ease;
   }
 
   .shop-categories__card:hover {
-    opacity: 0.8;
+    transform: translateY(-6px);
+  }
+
+  /* Animation initial state */
+  [data-categories-animate] .shop-categories__card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  [data-categories-animate] .shop-categories__card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  [data-categories-animate] .shop-categories__card.is-visible:hover {
+    transform: translateY(-6px);
   }
 
   .shop-categories__media {
     position: relative;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: var(--category-aspect-ratio, 1 / 1);
     overflow: hidden;
     background-color: #f5f5f5;
   }
@@ -90,6 +187,11 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .shop-categories__card:hover .shop-categories__media img {
+    transform: scale(1.08);
   }
 
   .shop-categories__media--placeholder {
@@ -111,36 +213,107 @@
     letter-spacing: 0.1em;
   }
 
+  /* Text below image (default) */
   .shop-categories__label {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 0.75rem 0.5rem;
-    text-align: center;
+    justify-content: space-between;
+    padding: 0.875rem 0.5rem;
+    text-align: left;
   }
 
   .shop-categories__name {
-    font-weight: 700;
-    font-size: 0.875rem;
+    font-weight: 600;
+    font-size: 0.9rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.03em;
   }
 
+  .shop-categories__arrow {
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .shop-categories__card:hover .shop-categories__arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Overlay text style */
+  .shop-categories__card--overlay {
+    position: relative;
+  }
+
+  .shop-categories__card--overlay .shop-categories__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+    transition: opacity 0.3s ease;
+  }
+
+  .shop-categories__card--overlay:hover .shop-categories__media::after {
+    opacity: 0.8;
+  }
+
+  .shop-categories__card--overlay .shop-categories__label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.25rem;
+    color: #fff;
+    z-index: 1;
+  }
+
+  .shop-categories__card--overlay .shop-categories__arrow {
+    color: #fff;
+  }
+
+  /* Mobile carousel mode */
+  @media screen and (max-width: 749px) {
+    .shop-categories__grid--mobile-carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      gap: 0.75rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .shop-categories__grid--mobile-carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .shop-categories__grid--mobile-carousel .shop-categories__card {
+      flex: 0 0 auto;
+      width: 65vw;
+      max-width: 280px;
+      scroll-snap-align: start;
+    }
+  }
+
+  /* Responsive columns */
   @media screen and (max-width: 999px) {
-    .shop-categories__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.625rem;
+    .shop-categories__grid:not(.shop-categories__grid--mobile-carousel) {
+      grid-template-columns: repeat(var(--category-columns-tablet, 2), minmax(0, 1fr));
+      gap: 0.75rem;
     }
   }
 
   @media screen and (max-width: 749px) {
     .shop-categories {
-      padding-block: clamp(2rem, 4vh, 3rem);
+      padding-block: clamp(1.5rem, 4vh, 2.5rem);
     }
 
     .shop-categories__header {
       margin-bottom: 1.25rem;
-      text-align: left;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
     }
 
     .shop-categories__title {
@@ -151,19 +324,25 @@
       font-size: 0.875rem;
     }
 
-    .shop-categories__grid {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 0.75rem;
-    }
-  }
-
-  @media screen and (max-width: 480px) {
-    .shop-categories__header {
-      margin-bottom: 1rem;
-    }
-
-    .shop-categories__grid {
+    .shop-categories__grid:not(.shop-categories__grid--mobile-carousel) {
+      grid-template-columns: repeat(var(--category-columns-mobile, 2), minmax(0, 1fr));
       gap: 0.625rem;
+    }
+
+    .shop-categories__label {
+      padding: 0.625rem 0.25rem;
+    }
+
+    .shop-categories__name {
+      font-size: 0.8rem;
+    }
+
+    .shop-categories__card:hover {
+      transform: none;
+    }
+
+    .shop-categories__arrow {
+      display: none;
     }
   }
 {% endstylesheet %}
@@ -174,20 +353,8 @@
   "class": "section-wrapper",
   "settings": [
     {
-      "type": "select",
-      "id": "section_width",
-      "label": "t:settings.width",
-      "options": [
-        {
-          "value": "page-width",
-          "label": "t:options.page"
-        },
-        {
-          "value": "full-width",
-          "label": "t:options.full"
-        }
-      ],
-      "default": "page-width"
+      "type": "header",
+      "content": "Content"
     },
     {
       "type": "text",
@@ -200,6 +367,139 @@
       "id": "subheading",
       "label": "Subheading",
       "default": "Explore curated pre-loved pieces by category."
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View all link text",
+      "default": "View all"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all link URL"
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "select",
+      "id": "text_style",
+      "label": "Text style",
+      "options": [
+        {
+          "value": "below",
+          "label": "Below image"
+        },
+        {
+          "value": "overlay",
+          "label": "Overlay on image"
+        }
+      ],
+      "default": "below"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hover_arrow",
+      "label": "Show arrow on hover",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        {
+          "value": "1 / 1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Portrait (3:4)"
+        },
+        {
+          "value": "4 / 3",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "16 / 9",
+          "label": "Wide (16:9)"
+        }
+      ],
+      "default": "1 / 1"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "label": "Columns (tablet)",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns (mobile)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "2",
+      "info": "Only applies when mobile carousel is disabled"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_carousel",
+      "label": "Enable mobile carousel",
+      "default": true,
+      "info": "Cards scroll horizontally on mobile"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animations",
+      "label": "Enable entrance animations",
+      "default": true
     },
     {
       "type": "color_scheme",
@@ -252,14 +552,23 @@
           "type": "url",
           "id": "link",
           "label": "Link"
-        },
+        }
       ]
     }
   ],
-  "max_blocks": 6,
+  "max_blocks": 12,
   "presets": [
     {
-      "name": "Men's categories grid",
+      "name": "Shop's Categories Grid",
+      "settings": {
+        "heading": "CATEGORIES",
+        "subheading": "Explore curated pre-loved pieces by category.",
+        "columns": 3,
+        "columns_tablet": 2,
+        "columns_mobile": "2",
+        "mobile_carousel": true,
+        "enable_animations": true
+      },
       "blocks": [
         {
           "type": "category",
@@ -284,5 +593,3 @@
   ]
 }
 {% endschema %}
-
-

@@ -25,10 +25,36 @@
       "settings": {
         "section_width": "page-width",
         "background_image": "shopify://shop_images/men-page-hero-image.png",
+        "mobile_background_image": "",
+        "background_color": "#F2F3ED",
+        "enable_overlay": false,
+        "overlay_style": "gradient-left",
+        "overlay_opacity": 30,
+        "badge_text": "",
         "heading": "WE LOVE PRE-LOVED.",
         "subheading": "Carefully selected, high-quality secondhand fashion.",
         "button_label": "Shop now",
         "button_link": "/collections/all",
+        "content_position": "center",
+        "text_alignment": "center",
+        "enable_animations": true,
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "just_dropped": {
+      "type": "shop-page-just-dropped",
+      "settings": {
+        "section_width": "page-width",
+        "heading": "JUST DROPPED",
+        "subheading": "Fresh finds, just landed. One-of-a-kind pieces waiting for you.",
+        "filter_tag": "men",
+        "product_limit": 8,
+        "autoplay": true,
+        "autoplay_speed": 3000,
+        "view_all_text": "View all new arrivals",
+        "view_all_link": "/collections/new-arrivals/men",
         "color_scheme": "",
         "padding-block-start": 40,
         "padding-block-end": 40
@@ -71,6 +97,16 @@
         "section_width": "page-width",
         "heading": "MEN'S CATEGORIES",
         "subheading": "Dial in your look with hand-picked pre-loved staples.",
+        "view_all_text": "",
+        "view_all_link": "",
+        "text_style": "below",
+        "show_hover_arrow": true,
+        "aspect_ratio": "1 / 1",
+        "columns": 3,
+        "columns_tablet": 2,
+        "columns_mobile": "2",
+        "mobile_carousel": true,
+        "enable_animations": true,
         "color_scheme": "",
         "padding-block-start": 32,
         "padding-block-end": 48
@@ -192,10 +228,18 @@
       ],
       "settings": {
         "section_width": "page-width",
-        "heading": "FROM ICONIC BRANDS TO TIMELLESS CLASSICS.",
+        "heading": "FROM ICONIC BRANDS TO TIMELESS CLASSICS.",
         "subheading": "Handpicked and quality verified by us.",
         "view_all_text": "View all brands",
         "view_all_link": "shopify://collections",
+        "grayscale_hover": true,
+        "show_brand_name": false,
+        "card_style": "none",
+        "columns": 6,
+        "columns_tablet": 4,
+        "columns_mobile": "3",
+        "mobile_carousel": true,
+        "enable_animations": true,
         "color_scheme": "",
         "padding-block-start": 40,
         "padding-block-end": 40
@@ -205,6 +249,7 @@
   "order": [
     "header",
     "hero_image",
+    "just_dropped",
     "categories",
     "brands"
   ]

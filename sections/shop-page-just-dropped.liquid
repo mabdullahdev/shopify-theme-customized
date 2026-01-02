@@ -1,0 +1,648 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
+  <div
+    class="just-dropped spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %}"
+  >
+    <div class="just-dropped__header">
+      <div class="just-dropped__header-text">
+        {% if section.settings.heading != blank %}
+          <h2 class="just-dropped__title">
+            {{ section.settings.heading }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <p class="just-dropped__subtitle">
+            {{ section.settings.subheading }}
+          </p>
+        {% endif %}
+      </div>
+
+      <div class="just-dropped__nav">
+        <button class="just-dropped__nav-btn just-dropped__nav-btn--prev" aria-label="Previous" type="button">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="just-dropped__nav-btn just-dropped__nav-btn--next" aria-label="Next" type="button">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    {% liquid
+      assign collection = section.settings.collection
+      assign product_limit = section.settings.product_limit
+      assign filter_tag = section.settings.filter_tag | strip | downcase
+
+      # Build filtered products array
+      assign filtered_products = ''
+      if collection != blank and collection.products.size > 0
+        for product in collection.products
+          if filter_tag == blank
+            # No filter - include all products
+            assign filtered_products = filtered_products | append: product.id | append: ','
+          else
+            # Check if product has the filter tag
+            assign product_tags_lower = product.tags | join: ',' | downcase
+            if product_tags_lower contains filter_tag
+              assign filtered_products = filtered_products | append: product.id | append: ','
+            endif
+          endif
+        endfor
+      endif
+    %}
+
+    <div class="just-dropped__carousel-wrapper">
+      <div class="just-dropped__carousel">
+        {% if collection != blank and collection.products.size > 0 %}
+          {% assign shown_count = 0 %}
+          {% for product in collection.products %}
+            {% liquid
+              assign dominated = false
+              if filter_tag != blank
+                assign product_tags_lower = product.tags | join: ',' | downcase
+                unless product_tags_lower contains filter_tag
+                  assign dominated = true
+                endunless
+              endif
+            %}
+            {% if dominated %}
+              {% continue %}
+            {% endif %}
+            {% assign shown_count = shown_count | plus: 1 %}
+            {% if shown_count > product_limit %}
+              {% break %}
+            {% endif %}
+            <a href="{{ product.url }}" class="just-dropped__product">
+              <div class="just-dropped__product-image">
+                {% if product.featured_image != blank %}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 400 }}"
+                    srcset="
+                      {{ product.featured_image | image_url: width: 200 }} 200w,
+                      {{ product.featured_image | image_url: width: 400 }} 400w,
+                      {{ product.featured_image | image_url: width: 600 }} 600w
+                    "
+                    sizes="(max-width: 749px) 42vw, 280px"
+                    alt="{{ product.featured_image.alt | escape }}"
+                    loading="lazy"
+                    width="{{ product.featured_image.width }}"
+                    height="{{ product.featured_image.height }}"
+                  >
+                {% else %}
+                  <div class="just-dropped__placeholder">
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                {% endif %}
+              </div>
+              <div class="just-dropped__product-info">
+                <h3 class="just-dropped__product-title">{{ product.title }}</h3>
+                <div class="just-dropped__product-price">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="just-dropped__price--sale">{{ product.price | money }}</span>
+                    <span class="just-dropped__price--compare">{{ product.compare_at_price | money }}</span>
+                  {% else %}
+                    <span>{{ product.price | money }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        {% else %}
+          {% for i in (1..product_limit) %}
+            <div class="just-dropped__product just-dropped__product--placeholder">
+              <div class="just-dropped__product-image">
+                <div class="just-dropped__placeholder">
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+              </div>
+              <div class="just-dropped__product-info">
+                <h3 class="just-dropped__product-title">Product Title</h3>
+                <div class="just-dropped__product-price">
+                  <span>{{ 2999 | money }}</span>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+    {% if section.settings.view_all_link != blank %}
+      <div class="just-dropped__footer">
+        <a href="{{ section.settings.view_all_link }}" class="just-dropped__view-all">
+          {{ section.settings.view_all_text | default: 'View all new arrivals' }}
+          <svg class="just-dropped__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.querySelector('.just-dropped');
+    if (!section) return;
+
+    const carousel = section.querySelector('.just-dropped__carousel');
+    const prevBtn = section.querySelector('.just-dropped__nav-btn--prev');
+    const nextBtn = section.querySelector('.just-dropped__nav-btn--next');
+
+    if (!carousel || !prevBtn || !nextBtn) return;
+
+    // Auto-play settings
+    const autoplayEnabled = {{ section.settings.autoplay | default: true }};
+    const autoplaySpeed = {{ section.settings.autoplay_speed | default: 3000 }};
+    let autoplayInterval = null;
+    let isPaused = false;
+
+    const getScrollAmount = () => {
+      const product = carousel.querySelector('.just-dropped__product');
+      if (!product) return 300;
+      const style = getComputedStyle(carousel);
+      const gap = parseFloat(style.gap) || 16;
+      return product.offsetWidth + gap;
+    };
+
+    const isAtEnd = () => {
+      return carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth - 1;
+    };
+
+    const isAtStart = () => {
+      return carousel.scrollLeft <= 0;
+    };
+
+    const updateButtons = () => {
+      const atStart = isAtStart();
+      const atEnd = isAtEnd();
+
+      prevBtn.disabled = atStart;
+      nextBtn.disabled = atEnd;
+      prevBtn.style.opacity = atStart ? '0.3' : '1';
+      nextBtn.style.opacity = atEnd ? '0.3' : '1';
+    };
+
+    const scrollNext = () => {
+      if (isAtEnd()) {
+        // Loop back to start
+        carousel.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+      }
+    };
+
+    const startAutoplay = () => {
+      if (!autoplayEnabled || autoplayInterval) return;
+      autoplayInterval = setInterval(() => {
+        if (!isPaused) {
+          scrollNext();
+        }
+      }, autoplaySpeed);
+    };
+
+    const stopAutoplay = () => {
+      if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+        autoplayInterval = null;
+      }
+    };
+
+    const pauseAutoplay = () => {
+      isPaused = true;
+    };
+
+    const resumeAutoplay = () => {
+      isPaused = false;
+    };
+
+    prevBtn.addEventListener('click', () => {
+      carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      scrollNext();
+    });
+
+    carousel.addEventListener('scroll', updateButtons);
+    updateButtons();
+
+    // Pause on hover
+    carousel.addEventListener('mouseenter', pauseAutoplay);
+    carousel.addEventListener('mouseleave', resumeAutoplay);
+
+    // Pause on touch
+    carousel.addEventListener('touchstart', pauseAutoplay, { passive: true });
+    carousel.addEventListener('touchend', () => {
+      setTimeout(resumeAutoplay, 3000); // Resume after 3s of no touch
+    }, { passive: true });
+
+    // Start autoplay
+    startAutoplay();
+
+    // Cleanup on page visibility change
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopAutoplay();
+      } else {
+        startAutoplay();
+      }
+    });
+
+    // Update on resize
+    window.addEventListener('resize', updateButtons);
+  });
+</script>
+
+{% stylesheet %}
+  .just-dropped {
+    padding-block: clamp(2rem, 4vh, 3rem);
+  }
+
+  .just-dropped__header {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    margin-bottom: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+
+  .just-dropped__header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .just-dropped__title {
+    margin: 0;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    text-transform: uppercase;
+  }
+
+  .just-dropped__subtitle {
+    margin: 0;
+    max-width: 32rem;
+    font-size: 0.95rem;
+    color: rgb(0 0 0 / 0.7);
+  }
+
+  .just-dropped__nav {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .just-dropped__nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1.5px solid var(--color-foreground, #000);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-foreground, #000);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .just-dropped__nav-btn:hover:not(:disabled) {
+    background: var(--color-foreground, #000);
+    color: var(--color-background, #fff);
+  }
+
+  .just-dropped__nav-btn:disabled {
+    cursor: not-allowed;
+  }
+
+  .just-dropped__carousel-wrapper {
+    position: relative;
+    max-width: var(--page-width);
+    margin-inline: auto;
+  }
+
+  .just-dropped__carousel {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 0.5rem;
+  }
+
+  .just-dropped__carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .just-dropped__product {
+    flex: 0 0 auto;
+    width: calc((100% - 3rem) / 4);
+    min-width: 200px;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    scroll-snap-align: start;
+    transition: transform 0.2s ease;
+  }
+
+  .just-dropped__product:hover {
+    transform: translateY(-4px);
+  }
+
+  .just-dropped__product-image {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background-color: #f5f5f5;
+    margin-bottom: 0.75rem;
+  }
+
+  .just-dropped__product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .just-dropped__product:hover .just-dropped__product-image img {
+    transform: scale(1.05);
+  }
+
+  .just-dropped__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  }
+
+  .just-dropped__placeholder .placeholder-svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.5;
+  }
+
+  .just-dropped__product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .just-dropped__product-title {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .just-dropped__product-price {
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .just-dropped__price--sale {
+    font-weight: 600;
+    color: #dc2626;
+  }
+
+  .just-dropped__price--compare {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+
+  .just-dropped__footer {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .just-dropped__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--color-foreground);
+    font-size: 0.95rem;
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+    text-underline-offset: 0.25rem;
+    transition: opacity 0.2s ease;
+  }
+
+  .just-dropped__view-all:hover {
+    opacity: 0.7;
+  }
+
+  .just-dropped__arrow {
+    flex-shrink: 0;
+  }
+
+  @media screen and (max-width: 999px) {
+    .just-dropped__product {
+      width: calc((100% - 2rem) / 3);
+      min-width: 180px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .just-dropped {
+      padding-block: clamp(1.5rem, 4vh, 2.5rem);
+    }
+
+    .just-dropped__header {
+      margin-bottom: 1rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .just-dropped__title {
+      font-size: clamp(1.5rem, 4vw, 1.75rem);
+    }
+
+    .just-dropped__subtitle {
+      font-size: 0.875rem;
+    }
+
+    .just-dropped__nav {
+      display: none;
+    }
+
+    .just-dropped__product {
+      width: 42vw;
+      min-width: 150px;
+      max-width: 200px;
+    }
+
+    .just-dropped__product:hover {
+      transform: none;
+    }
+
+    .just-dropped__product-title {
+      font-size: 0.8rem;
+    }
+
+    .just-dropped__product-price {
+      font-size: 0.8rem;
+    }
+
+    .just-dropped__footer {
+      margin-top: 1.25rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Just Dropped",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Select a collection to display (e.g., 'New Arrivals')"
+    },
+    {
+      "type": "text",
+      "id": "filter_tag",
+      "label": "Filter by tag",
+      "info": "Only show products with this tag (e.g., 'men' or 'women'). Leave empty to show all."
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Number of products",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay speed",
+      "info": "Time between slides in milliseconds",
+      "min": 2000,
+      "max": 6000,
+      "step": 500,
+      "unit": "ms",
+      "default": 3000
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "JUST DROPPED"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Fresh finds, just landed. One-of-a-kind pieces waiting for you."
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View all link text",
+      "default": "View all new arrivals"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all link URL"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Just Dropped",
+      "settings": {
+        "heading": "JUST DROPPED",
+        "subheading": "Fresh finds, just landed. One-of-a-kind pieces waiting for you.",
+        "product_limit": 8
+      }
+    }
+  ]
+}
+{% endschema %}
