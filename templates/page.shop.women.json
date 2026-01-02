@@ -9,22 +9,23 @@
  */
 {
   "sections": {
-    "men_header": {
-      "type": "men-page-header",
+    "header": {
+      "type": "shop-page-header",
       "settings": {
         "section_width": "page-width",
-        "link_text": "Shop Women",
-        "link_url": "shopify://pages/women",
+        "link_text": "Shop Men",
+        "link_url": "shopify://pages/men",
         "color_scheme": "",
         "padding-block-start": 40,
         "padding-block-end": 40
       }
     },
-    "men_hero_image": {
-      "type": "men-page-hero-image",
+    "hero_image": {
+      "type": "shop-page-hero-image",
       "settings": {
         "section_width": "page-width",
-        "background_image": "shopify://shop_images/men-page-hero-image.png",
+        "background_color": "#ECEAE6",
+        "background_image": "shopify://shop_images/women-page-hero-image.jpg",
         "heading": "WE LOVE PRE-LOVED.",
         "subheading": "Carefully selected, high-quality secondhand fashion.",
         "button_label": "Shop now",
@@ -34,8 +35,8 @@
         "padding-block-end": 40
       }
     },
-    "men_categories": {
-      "type": "men-page-categories",
+    "categories": {
+      "type": "shop-page-categories",
       "blocks": {
         "jackets": {
           "type": "category",
@@ -69,15 +70,15 @@
       ],
       "settings": {
         "section_width": "page-width",
-        "heading": "MEN'S CATEGORIES",
+        "heading": "WOMEN'S CATEGORIES",
         "subheading": "Dial in your look with hand-picked pre-loved staples.",
         "color_scheme": "",
         "padding-block-start": 32,
         "padding-block-end": 48
       }
     },
-    "men_brands": {
-      "type": "men-page-brands",
+    "brands": {
+      "type": "shop-page-brands",
       "blocks": {
         "nike": {
           "type": "brand",
@@ -203,9 +204,9 @@
     }
   },
   "order": [
-    "men_header",
-    "men_hero_image",
-    "men_categories",
-    "men_brands"
+    "header",
+    "hero_image",
+    "categories",
+    "brands"
   ]
 }

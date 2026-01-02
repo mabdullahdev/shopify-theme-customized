@@ -1,0 +1,211 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "shop-page-header",
+      "settings": {
+        "section_width": "page-width",
+        "link_text": "Shop Women",
+        "link_url": "shopify://pages/women",
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "hero_image": {
+      "type": "shop-page-hero-image",
+      "settings": {
+        "section_width": "page-width",
+        "background_image": "shopify://shop_images/men-page-hero-image.png",
+        "heading": "WE LOVE PRE-LOVED.",
+        "subheading": "Carefully selected, high-quality secondhand fashion.",
+        "button_label": "Shop now",
+        "button_link": "/collections/all",
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "categories": {
+      "type": "shop-page-categories",
+      "blocks": {
+        "jackets": {
+          "type": "category",
+          "settings": {
+            "title": "Jackets",
+            "image": "shopify://shop_images/jacket-category.png",
+            "link": "/collections/jackets/men"
+          }
+        },
+        "hoodies": {
+          "type": "category",
+          "settings": {
+            "title": "Hoodies",
+            "image": "shopify://shop_images/hoodie-category.png",
+            "link": "/collections/hoodies/men"
+          }
+        },
+        "shoes": {
+          "type": "category",
+          "settings": {
+            "title": "Shoes",
+            "image": "shopify://shop_images/shoes-category.png",
+            "link": "/collections/shoes/men"
+          }
+        }
+      },
+      "block_order": [
+        "jackets",
+        "hoodies",
+        "shoes"
+      ],
+      "settings": {
+        "section_width": "page-width",
+        "heading": "MEN'S CATEGORIES",
+        "subheading": "Dial in your look with hand-picked pre-loved staples.",
+        "color_scheme": "",
+        "padding-block-start": 32,
+        "padding-block-end": 48
+      }
+    },
+    "brands": {
+      "type": "shop-page-brands",
+      "blocks": {
+        "nike": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Nike",
+            "image": "shopify://shop_images/brand-nike.png",
+            "link": "/collections/nike/men"
+          }
+        },
+        "adidas": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Adidas",
+            "image": "shopify://shop_images/brand-adidas.png",
+            "link": "/collections/adidas/men"
+          }
+        },
+        "puma": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Puma",
+            "image": "shopify://shop_images/brand-puma.png",
+            "link": "/collections/puma/men"
+          }
+        },
+        "levis": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Levi's",
+            "image": "shopify://shop_images/brand-levis.png",
+            "link": "/collections/levis/men"
+          }
+        },
+        "zara": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Zara",
+            "image": "shopify://shop_images/brand-zara.png",
+            "link": "/collections/zara/men"
+          }
+        },
+        "h_and_m": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "H&M",
+            "image": "shopify://shop_images/brand-handm.png",
+            "link": "/collections/h-m/men"
+          }
+        },
+        "tommy_hilfiger": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Tommy Hilfiger",
+            "image": "shopify://shop_images/brand-tommy-hilfiger.png",
+            "link": "/collections/tommy-hilfiger/men"
+          }
+        },
+        "calvin_klein": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Calvin Klein",
+            "image": "shopify://shop_images/brand-ck.png",
+            "link": "/collections/calvin-klein/men"
+          }
+        },
+        "lacoste": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Lacoste",
+            "image": "shopify://shop_images/brand-lacoste.png",
+            "link": "/collections/lacoste/men"
+          }
+        },
+        "next": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Next",
+            "image": "shopify://shop_images/brand-next.png",
+            "link": "/collections/next/men"
+          }
+        },
+        "reebok": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Reebok",
+            "image": "shopify://shop_images/brand-reebok.png",
+            "link": "/collections/reebok/men"
+          }
+        },
+        "ralph_lauren": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Ralph Lauren",
+            "image": "shopify://shop_images/brand-raulph-lauren.png",
+            "link": "/collections/ralph-lauren/men"
+          }
+        }
+      },
+      "block_order": [
+        "nike",
+        "adidas",
+        "puma",
+        "levis",
+        "zara",
+        "h_and_m",
+        "tommy_hilfiger",
+        "calvin_klein",
+        "lacoste",
+        "next",
+        "reebok",
+        "ralph_lauren"
+      ],
+      "settings": {
+        "section_width": "page-width",
+        "heading": "A WORLD OF BRANDS, FROM CULT ICONS TO ENDURING CLASSICS.",
+        "subheading": "Handpicked and quality verified by us.",
+        "view_all_text": "View all brands",
+        "view_all_link": "shopify://collections",
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    }
+  },
+  "order": [
+    "header",
+    "hero_image",
+    "categories",
+    "brands"
+  ]
+}

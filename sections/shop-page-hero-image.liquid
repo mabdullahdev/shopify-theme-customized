@@ -5,8 +5,29 @@
     style="
       {% render 'spacing-style', settings: section.settings %}
       {% if section.settings.background_image != blank %}
-        --men-hero-background-image: url('{{ section.settings.background_image | image_url: width: 2400 }}');
+        --shop-hero-background-image: url('{{ section.settings.background_image | image_url: width: 2400 }}');
       {% endif %}
+      {%- liquid
+        assign bg_color = section.settings.background_color | default: '#F2F3ED'
+        assign bg_color = bg_color | strip | downcase
+        case bg_color
+          when 'black'
+            assign bg_color = '#000000'
+          when 'white'
+            assign bg_color = '#FFFFFF'
+          when 'red'
+            assign bg_color = '#FF0000'
+          when 'blue'
+            assign bg_color = '#0000FF'
+          when 'green'
+            assign bg_color = '#008000'
+          when 'yellow'
+            assign bg_color = '#FFFF00'
+          when 'transparent'
+            assign bg_color = 'transparent'
+        endcase
+      -%}
+      --shop-hero-background-color: {{ bg_color }};
     "
   >
     <div class="men-hero__overlay"></div>
@@ -47,8 +68,8 @@
     justify-content: center;
     padding-block: clamp(3rem, 6vh, 5rem);
     padding-inline: var(--page-margin);
-    background-color: #F2F3ED;
-    background-image: var(--men-hero-background-image);
+    background-color: var(--shop-hero-background-color, #F2F3ED);
+    background-image: var(--shop-hero-background-image);
     background-size: 50% auto;
     background-position: right center;
     background-repeat: no-repeat;
@@ -181,6 +202,13 @@
       "type": "image_picker",
       "id": "background_image",
       "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F2F3ED",
+      "info": "Enter a CSS color value (hex, rgb, or color name like 'black', 'white', etc.)"
     },
     {
       "type": "text",
