@@ -24,8 +24,8 @@
       "type": "shop-page-hero-image",
       "settings": {
         "section_width": "page-width",
-        "background_color": "#ECEAE6",
         "background_image": "shopify://shop_images/women-page-hero-image.jpg",
+        "background_color": "#ECEAE6",
         "heading": "WE LOVE PRE-LOVED.",
         "subheading": "Carefully selected, high-quality secondhand fashion.",
         "button_label": "Shop now",
@@ -41,25 +41,25 @@
         "jackets": {
           "type": "category",
           "settings": {
-            "title": "Jackets",
-            "image": "shopify://shop_images/jacket-category.png",
-            "link": "/collections/jackets/men"
+            "title": "Jackets & Coats",
+            "image": "shopify://shop_images/jackets-category-women.png",
+            "link": "/collections/jackets/women"
           }
         },
         "hoodies": {
           "type": "category",
           "settings": {
             "title": "Hoodies",
-            "image": "shopify://shop_images/hoodie-category.png",
-            "link": "/collections/hoodies/men"
+            "image": "shopify://shop_images/hoodie-category-women.png",
+            "link": "/collections/hoodies/women"
           }
         },
         "shoes": {
           "type": "category",
           "settings": {
-            "title": "Shoes",
-            "image": "shopify://shop_images/shoes-category.png",
-            "link": "/collections/shoes/men"
+            "title": "Tops",
+            "image": "shopify://shop_images/tops-category-women.png",
+            "link": "/collections/tops/women"
           }
         }
       },
@@ -80,28 +80,28 @@
     "brands": {
       "type": "shop-page-brands",
       "blocks": {
-        "nike": {
+        "gucci": {
           "type": "brand",
           "settings": {
-            "brand_name": "Nike",
-            "image": "shopify://shop_images/brand-nike.png",
-            "link": "/collections/nike/men"
+            "brand_name": "Gucci",
+            "image": "shopify://shop_images/brand-gucci.png",
+            "link": "/collections/gucci/women"
           }
         },
-        "adidas": {
+        "prada": {
           "type": "brand",
           "settings": {
-            "brand_name": "Adidas",
-            "image": "shopify://shop_images/brand-adidas.png",
-            "link": "/collections/adidas/men"
+            "brand_name": "Prada",
+            "image": "shopify://shop_images/brand-prada.png",
+            "link": "/collections/prada/women"
           }
         },
-        "puma": {
+        "luis_vuitton": {
           "type": "brand",
           "settings": {
-            "brand_name": "Puma",
-            "image": "shopify://shop_images/brand-puma.png",
-            "link": "/collections/puma/men"
+            "brand_name": "Luis Vuitton",
+            "image": "shopify://shop_images/brand-lv.png",
+            "link": "/collections/luis-vuitton/women"
           }
         },
         "levis": {
@@ -109,7 +109,7 @@
           "settings": {
             "brand_name": "Levi's",
             "image": "shopify://shop_images/brand-levis.png",
-            "link": "/collections/levis/men"
+            "link": "/collections/levis/women"
           }
         },
         "zara": {
@@ -117,7 +117,7 @@
           "settings": {
             "brand_name": "Zara",
             "image": "shopify://shop_images/brand-zara.png",
-            "link": "/collections/zara/men"
+            "link": "/collections/zara/women"
           }
         },
         "h_and_m": {
@@ -125,7 +125,7 @@
           "settings": {
             "brand_name": "H&M",
             "image": "shopify://shop_images/brand-handm.png",
-            "link": "/collections/h-m/men"
+            "link": "/collections/h-m/women"
           }
         },
         "tommy_hilfiger": {
@@ -133,23 +133,23 @@
           "settings": {
             "brand_name": "Tommy Hilfiger",
             "image": "shopify://shop_images/brand-tommy-hilfiger.png",
-            "link": "/collections/tommy-hilfiger/men"
+            "link": "/collections/tommy-hilfiger/women"
           }
         },
-        "calvin_klein": {
+        "fendi": {
           "type": "brand",
           "settings": {
-            "brand_name": "Calvin Klein",
-            "image": "shopify://shop_images/brand-ck.png",
-            "link": "/collections/calvin-klein/men"
+            "brand_name": "Fendi",
+            "image": "shopify://shop_images/brand-fendi.png",
+            "link": "/collections/fendi/women"
           }
         },
-        "lacoste": {
+        "balenciaga": {
           "type": "brand",
           "settings": {
-            "brand_name": "Lacoste",
-            "image": "shopify://shop_images/brand-lacoste.png",
-            "link": "/collections/lacoste/men"
+            "brand_name": "Balenciaga",
+            "image": "shopify://shop_images/brand-balenciaga.png",
+            "link": "/collections/balenciaga/women"
           }
         },
         "next": {
@@ -157,15 +157,15 @@
           "settings": {
             "brand_name": "Next",
             "image": "shopify://shop_images/brand-next.png",
-            "link": "/collections/next/men"
+            "link": "/collections/next/women"
           }
         },
-        "reebok": {
+        "chanel": {
           "type": "brand",
           "settings": {
-            "brand_name": "Reebok",
-            "image": "shopify://shop_images/brand-reebok.png",
-            "link": "/collections/reebok/men"
+            "brand_name": "Chanel",
+            "image": "shopify://shop_images/brand-chanel.png",
+            "link": "/collections/chanel/women"
           }
         },
         "ralph_lauren": {
@@ -173,27 +173,27 @@
           "settings": {
             "brand_name": "Ralph Lauren",
             "image": "shopify://shop_images/brand-raulph-lauren.png",
-            "link": "/collections/ralph-lauren/men"
+            "link": "/collections/ralph-lauren/women"
           }
         }
       },
       "block_order": [
-        "nike",
-        "adidas",
-        "puma",
+        "gucci",
+        "prada",
+        "luis_vuitton",
         "levis",
         "zara",
         "h_and_m",
         "tommy_hilfiger",
-        "calvin_klein",
-        "lacoste",
+        "fendi",
+        "balenciaga",
         "next",
-        "reebok",
+        "chanel",
         "ralph_lauren"
       ],
       "settings": {
         "section_width": "page-width",
-        "heading": "A WORLD OF BRANDS, FROM CULT ICONS TO ENDURING CLASSICS.",
+        "heading": "FROM ICONIC BRANDS TO TIMELLESS CLASSICS.",
         "subheading": "Handpicked and quality verified by us.",
         "view_all_text": "View all brands",
         "view_all_link": "shopify://collections",
