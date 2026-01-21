@@ -1,0 +1,629 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="section section--page-width color-{{ section.settings.color_scheme }}">
+  <div
+    class="hero-slider"
+    data-hero-slider
+    data-autoplay="{{ section.settings.autoplay }}"
+    data-autoplay-speed="{{ section.settings.autoplay_speed }}"
+    style="--autoplay-speed: {{ section.settings.autoplay_speed }}ms;"
+  >
+    <div class="hero-slider__track">
+      {% for block in section.blocks %}
+        <div
+          class="hero-slider__slide{% if forloop.first %} is-active{% endif %}"
+          data-slide-index="{{ forloop.index0 }}"
+          style="
+            {% if block.settings.background_image != blank %}
+              --slide-bg-image: url('{{ block.settings.background_image | image_url: width: 2400 }}');
+            {% endif %}
+            {% if block.settings.mobile_background_image != blank %}
+              --slide-mobile-bg-image: url('{{ block.settings.mobile_background_image | image_url: width: 800 }}');
+            {% endif %}
+            --slide-bg-color: {{ block.settings.background_color | default: '#F2F3ED' }};
+            --slide-text-color: {{ block.settings.text_color | default: '#000000' }};
+          "
+          {{ block.shopify_attributes }}
+        >
+          {% if block.settings.enable_overlay %}
+            <div class="hero-slider__overlay" style="--overlay-opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+          {% endif %}
+
+          <div class="hero-slider__content hero-slider__content--{{ block.settings.content_position }}">
+            {% if block.settings.badge_text != blank %}
+              <span class="hero-slider__badge">{{ block.settings.badge_text }}</span>
+            {% endif %}
+
+            {% if block.settings.heading != blank %}
+              <h2 class="hero-slider__title">{{ block.settings.heading }}</h2>
+            {% endif %}
+
+            {% if block.settings.subheading != blank %}
+              <p class="hero-slider__subtitle">{{ block.settings.subheading }}</p>
+            {% endif %}
+
+            {% if block.settings.button_label != blank and block.settings.button_link != blank %}
+              <a href="{{ block.settings.button_link }}" class="hero-slider__button">
+                <span>{{ block.settings.button_label }}</span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if section.blocks.size > 1 %}
+      <div class="hero-slider__nav">
+        <button class="hero-slider__nav-btn hero-slider__nav-btn--prev" aria-label="Previous slide" type="button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="hero-slider__nav-btn hero-slider__nav-btn--next" aria-label="Next slide" type="button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="hero-slider__dots">
+        {% for block in section.blocks %}
+          <button
+            class="hero-slider__dot{% if forloop.first %} is-active{% endif %}"
+            data-dot-index="{{ forloop.index0 }}"
+            aria-label="Go to slide {{ forloop.index }}"
+            type="button"
+          ></button>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const slider = document.querySelector('[data-hero-slider]');
+    if (!slider) return;
+
+    const slides = slider.querySelectorAll('.hero-slider__slide');
+    const dots = slider.querySelectorAll('.hero-slider__dot');
+    const prevBtn = slider.querySelector('.hero-slider__nav-btn--prev');
+    const nextBtn = slider.querySelector('.hero-slider__nav-btn--next');
+
+    if (slides.length <= 1) return;
+
+    let currentIndex = 0;
+    let autoplayInterval = null;
+    const autoplayEnabled = slider.dataset.autoplay === 'true';
+    const autoplaySpeed = parseInt(slider.dataset.autoplaySpeed) || 5000;
+
+    const goToSlide = (index) => {
+      slides[currentIndex].classList.remove('is-active');
+      dots[currentIndex]?.classList.remove('is-active');
+
+      currentIndex = (index + slides.length) % slides.length;
+
+      slides[currentIndex].classList.add('is-active');
+
+      // Reset progress bar by removing/re-adding class after reflow
+      const activeDot = dots[currentIndex];
+      if (activeDot) {
+        activeDot.classList.add('is-active');
+        // Force restart of progress animation
+        activeDot.classList.add('is-resetting');
+        requestAnimationFrame(() => {
+          activeDot.classList.remove('is-resetting');
+        });
+      }
+    };
+
+    const nextSlide = () => goToSlide(currentIndex + 1);
+    const prevSlide = () => goToSlide(currentIndex - 1);
+
+    const startAutoplay = () => {
+      if (!autoplayEnabled || autoplayInterval) return;
+      autoplayInterval = setInterval(nextSlide, autoplaySpeed);
+    };
+
+    const stopAutoplay = () => {
+      if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+        autoplayInterval = null;
+      }
+    };
+
+    prevBtn?.addEventListener('click', () => {
+      prevSlide();
+      stopAutoplay();
+      startAutoplay();
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      nextSlide();
+      stopAutoplay();
+      startAutoplay();
+    });
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        goToSlide(index);
+        stopAutoplay();
+        startAutoplay();
+      });
+    });
+
+    slider.addEventListener('mouseenter', stopAutoplay);
+    slider.addEventListener('mouseleave', startAutoplay);
+
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    slider.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      stopAutoplay();
+    }, { passive: true });
+
+    slider.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) nextSlide();
+        else prevSlide();
+      }
+      startAutoplay();
+    }, { passive: true });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopAutoplay();
+      else startAutoplay();
+    });
+
+    startAutoplay();
+  });
+</script>
+
+{% stylesheet %}
+  .hero-slider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .hero-slider__track {
+    position: relative;
+    height: 500px;
+  }
+
+  .hero-slider__slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding: clamp(2rem, 5vw, 4rem);
+    background-color: var(--slide-bg-color);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    overflow: hidden;
+  }
+
+  .hero-slider__slide::before {
+    content: '';
+    position: absolute;
+    inset: -10%;
+    background-image: var(--slide-bg-image);
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.05);
+    transition: transform 5s ease-out;
+  }
+
+  .hero-slider__slide.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .hero-slider__slide.is-active::before {
+    transform: scale(1);
+  }
+
+  .hero-slider__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, var(--overlay-opacity, 0.3));
+    pointer-events: none;
+  }
+
+  .hero-slider__content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+    color: var(--slide-text-color);
+  }
+
+  .hero-slider__content--left {
+    margin-right: auto;
+    text-align: left;
+  }
+
+  .hero-slider__content--center {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .hero-slider__content--right {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  .hero-slider__badge {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.375rem 1rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background-color: var(--slide-text-color);
+    color: var(--slide-bg-color);
+  }
+
+  .hero-slider__title {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-slider__subtitle {
+    margin: 0 0 2rem;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    opacity: 0.9;
+  }
+
+  .hero-slider__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background-color: var(--slide-text-color);
+    color: var(--slide-bg-color);
+    border: 2px solid var(--slide-text-color);
+    transition: all 0.3s ease;
+  }
+
+  .hero-slider__button:hover {
+    background-color: transparent;
+    color: var(--slide-text-color);
+  }
+
+  .hero-slider__button svg {
+    transition: transform 0.3s ease;
+  }
+
+  .hero-slider__button:hover svg {
+    transform: translateX(4px);
+  }
+
+  .hero-slider__nav {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .hero-slider__nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+  }
+
+  .hero-slider__nav-btn:hover {
+    background: #fff;
+    transform: scale(1.1);
+  }
+
+  .hero-slider__dots {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.75rem;
+    z-index: 10;
+  }
+
+  .hero-slider__dot {
+    position: relative;
+    width: 32px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: width 0.4s ease, background 0.3s ease;
+  }
+
+  .hero-slider__dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .hero-slider__dot:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .hero-slider__dot.is-active {
+    width: 48px;
+  }
+
+  .hero-slider__dot.is-active::after {
+    transform: scaleX(1);
+    transition: transform var(--autoplay-speed, 5000ms) linear;
+  }
+
+  .hero-slider[data-autoplay="false"] .hero-slider__dot.is-active::after {
+    transition: transform 0.3s ease;
+  }
+
+  .hero-slider__dot.is-resetting::after {
+    transform: scaleX(0) !important;
+    transition: none !important;
+  }
+
+  @media screen and (max-width: 749px) {
+    .hero-slider__track {
+      height: 450px;
+    }
+
+    .hero-slider__slide {
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+    }
+
+    .hero-slider__slide::before {
+      background-image: var(--slide-mobile-bg-image, var(--slide-bg-image));
+    }
+
+    .hero-slider__content {
+      max-width: 100%;
+      text-align: center !important;
+      margin-inline: auto !important;
+    }
+
+    .hero-slider__title {
+      font-size: clamp(2rem, 8vw, 2.5rem);
+    }
+
+    .hero-slider__subtitle {
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-slider__button {
+      padding: 0.875rem 1.5rem;
+      font-size: 0.8rem;
+    }
+
+    .hero-slider__nav {
+      display: none;
+    }
+
+    .hero-slider__dots {
+      bottom: 1.25rem;
+      gap: 0.5rem;
+    }
+
+    .hero-slider__dot {
+      width: 24px;
+      height: 2px;
+    }
+
+    .hero-slider__dot.is-active {
+      width: 36px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero Slider",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay speed",
+      "info": "Time between slides",
+      "min": 3000,
+      "max": 8000,
+      "step": 500,
+      "unit": "ms",
+      "default": 5000
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Images"
+        },
+        {
+          "type": "image_picker",
+          "id": "background_image",
+          "label": "Background image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_background_image",
+          "label": "Mobile background image",
+          "info": "Optional. Uses desktop image if not set."
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color",
+          "default": "#F2F3ED"
+        },
+        {
+          "type": "header",
+          "content": "Overlay"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_overlay",
+          "label": "Enable dark overlay",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay opacity",
+          "min": 10,
+          "max": 70,
+          "step": 10,
+          "unit": "%",
+          "default": 30
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge text",
+          "info": "Optional small label above heading"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "WE LOVE PRE-LOVED."
+        },
+        {
+          "type": "textarea",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "Sustainable fashion that looks good and does good."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "select",
+          "id": "content_position",
+          "label": "Content position",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#000000"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Slider",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "heading": "WE LOVE PRE-LOVED.",
+            "subheading": "Sustainable fashion that looks good and does good.",
+            "button_label": "Shop now",
+            "content_position": "center"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "heading": "NEW ARRIVALS WEEKLY",
+            "subheading": "Fresh finds, carefully curated just for you.",
+            "button_label": "Explore",
+            "content_position": "center"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

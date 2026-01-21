@@ -1,0 +1,394 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
+  <div
+    class="shop-gender spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %}"
+    {% if section.settings.enable_animations %}data-gender-animate{% endif %}
+  >
+    {% if section.settings.heading != blank %}
+      <div class="shop-gender__header">
+        <h2 class="shop-gender__title">{{ section.settings.heading }}</h2>
+      </div>
+    {% endif %}
+
+    <div class="shop-gender__grid">
+      {% for block in section.blocks %}
+        <a
+          href="{{ block.settings.link }}"
+          class="shop-gender__card"
+          style="
+            {% if block.settings.image != blank %}
+              --card-bg-image: url('{{ block.settings.image | image_url: width: 1200 }}');
+            {% endif %}
+            {% if block.settings.mobile_image != blank %}
+              --card-mobile-bg-image: url('{{ block.settings.mobile_image | image_url: width: 600 }}');
+            {% endif %}
+            --card-bg-color: {{ block.settings.background_color | default: '#F2F3ED' }};
+            --card-text-color: {{ block.settings.text_color | default: '#000000' }};
+          "
+          {{ block.shopify_attributes }}
+        >
+          {% if block.settings.enable_overlay %}
+            <div class="shop-gender__overlay"></div>
+          {% endif %}
+
+          <div class="shop-gender__content">
+            <h3 class="shop-gender__card-title">{{ block.settings.title }}</h3>
+            {% if block.settings.subtitle != blank %}
+              <p class="shop-gender__card-subtitle">{{ block.settings.subtitle }}</p>
+            {% endif %}
+            <span class="shop-gender__cta">
+              {{ block.settings.cta_text | default: 'Shop now' }}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.querySelector('[data-gender-animate]');
+    if (!section) return;
+
+    const cards = section.querySelectorAll('.shop-gender__card');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          cards.forEach((card, index) => {
+            setTimeout(() => {
+              card.classList.add('is-visible');
+            }, index * 150);
+          });
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.1 });
+
+    observer.observe(section);
+  });
+</script>
+
+{% stylesheet %}
+  .shop-gender {
+    padding-block: clamp(2rem, 4vh, 3rem);
+  }
+
+  .shop-gender__header {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .shop-gender__title {
+    margin: 0;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    text-transform: uppercase;
+  }
+
+  .shop-gender__grid {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .shop-gender__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 400px;
+    padding: 2rem;
+    text-decoration: none;
+    color: var(--card-text-color);
+    background-color: var(--card-bg-color);
+    background-image: var(--card-bg-image);
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .shop-gender__card:hover {
+    transform: scale(0.98);
+  }
+
+  .shop-gender__card:hover .shop-gender__overlay {
+    opacity: 0.4;
+  }
+
+  /* Animation */
+  [data-gender-animate] .shop-gender__card {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  [data-gender-animate] .shop-gender__card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  [data-gender-animate] .shop-gender__card.is-visible:hover {
+    transform: scale(0.98);
+  }
+
+  .shop-gender__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+    transition: opacity 0.3s ease;
+  }
+
+  .shop-gender__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .shop-gender__card-title {
+    margin: 0 0 0.5rem;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .shop-gender__card-subtitle {
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+    opacity: 0.9;
+  }
+
+  .shop-gender__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .shop-gender__cta svg {
+    transition: transform 0.3s ease;
+  }
+
+  .shop-gender__card:hover .shop-gender__cta svg {
+    transform: translateX(4px);
+  }
+
+  @media screen and (max-width: 749px) {
+    .shop-gender {
+      padding-block: clamp(1.5rem, 4vh, 2.5rem);
+    }
+
+    .shop-gender__header {
+      margin-bottom: 1rem;
+    }
+
+    .shop-gender__title {
+      font-size: clamp(1.5rem, 4vw, 1.75rem);
+    }
+
+    .shop-gender__grid {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .shop-gender__card {
+      min-height: 280px;
+      padding: 1.5rem;
+      background-image: var(--card-mobile-bg-image, var(--card-bg-image));
+    }
+
+    .shop-gender__card:hover {
+      transform: none;
+    }
+
+    .shop-gender__card-title {
+      font-size: clamp(1.75rem, 6vw, 2.25rem);
+    }
+
+    .shop-gender__card-subtitle {
+      font-size: 0.875rem;
+    }
+
+    .shop-gender__cta {
+      font-size: 0.8rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Shop by Gender",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "SHOP BY CATEGORY"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animations",
+      "label": "Enable entrance animations",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "gender_card",
+      "name": "Gender Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Women"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Curated pre-loved fashion"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "CTA text",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "header",
+          "content": "Images"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile background image",
+          "info": "Optional"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color",
+          "default": "#F2F3ED"
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_overlay",
+          "label": "Enable gradient overlay",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#FFFFFF"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [
+    {
+      "name": "Shop by Gender",
+      "settings": {
+        "heading": ""
+      },
+      "blocks": [
+        {
+          "type": "gender_card",
+          "settings": {
+            "title": "Women",
+            "subtitle": "Curated pre-loved fashion",
+            "cta_text": "Shop Women",
+            "text_color": "#FFFFFF",
+            "enable_overlay": true
+          }
+        },
+        {
+          "type": "gender_card",
+          "settings": {
+            "title": "Men",
+            "subtitle": "Quality secondhand style",
+            "cta_text": "Shop Men",
+            "text_color": "#FFFFFF",
+            "enable_overlay": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,600 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
+  <div
+    class="why-choose spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %}"
+    {% if section.settings.enable_animations %}data-why-animate{% endif %}
+  >
+    {% if section.settings.heading != blank %}
+      <div class="why-choose__header">
+        <h2 class="why-choose__title">{{ section.settings.heading }}</h2>
+      </div>
+    {% endif %}
+
+    <div class="why-choose__grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'feature' %}
+          <div class="why-choose__item" {{ block.shopify_attributes }}>
+            <div class="why-choose__icon">
+              {% case block.settings.icon %}
+                {% when 'quality' %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2.5"/>
+                    <path d="M16 24L21 29L32 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {% when 'verified' %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 4L28.5 8.5H35V15.5L39.5 20V28L35 32.5V39H28.5L24 43.5L19.5 39H13V32.5L8.5 28V20L13 15.5V8.5H19.5L24 4Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17 24L22 29L31 20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {% when 'package' %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M42 32V16L24 6L6 16V32L24 42L42 32Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6 16L24 26L42 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M24 42V26" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M15 11L33 21" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                  </svg>
+                {% when 'leaf' %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 42C24 42 8 34 8 20C8 6 24 4 24 4C24 4 40 6 40 20C40 34 24 42 24 42Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M24 42V22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M24 28C28 24 32 22 36 20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M24 22C20 18 16 16 12 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                  </svg>
+                {% when 'recycle' %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 8L24 4L31 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M24 4V18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M38 32L44 36L38 40" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M44 36H30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M10 32L4 36L10 40" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 36H18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M31 8L38 20L31 32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17 8L10 20L17 32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {% when 'returns' %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 18H32C38.6274 18 44 23.3726 44 30C44 36.6274 38.6274 42 32 42H24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 26L6 18L14 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {% when 'secure' %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 44C24 44 40 36 40 24V10L24 4L8 10V24C8 36 24 44 24 44Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17 24L22 29L31 20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {% when 'shipping' %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M32 14H38L44 22V34H32V14Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 14H32V34H4V14Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="34" r="4" stroke="currentColor" stroke-width="2.5"/>
+                    <circle cx="36" cy="34" r="4" stroke="currentColor" stroke-width="2.5"/>
+                  </svg>
+                {% when 'heart' %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M41.68 9.22C40.7066 8.24603 39.5567 7.46619 38.2954 6.92395C37.0341 6.38171 35.6853 6.08749 34.32 6.05749C32.9547 6.02749 31.5931 6.26252 30.3071 6.74927C29.0212 7.23601 27.8351 7.96588 26.815 8.89749L24 11.7125L21.185 8.89749C19.1245 6.83758 16.3378 5.68237 13.435 5.68237C10.5321 5.68237 7.74543 6.83758 5.685 8.89749C3.62457 10.9574 2.46906 13.7438 2.46906 16.6462C2.46906 19.5487 3.62457 22.3351 5.685 24.395L8.5 27.21L24 42.71L39.5 27.21L42.315 24.395C43.2472 23.3757 43.9775 22.1903 44.4645 20.9049C44.9515 19.6196 45.1865 18.2585 45.1565 16.8937C45.1265 15.5289 44.832 14.1807 44.2895 12.92C43.747 11.6593 42.9668 10.5098 42 9.537L41.68 9.22Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {% when 'tag' %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M41.18 26.82L26.84 41.16C26.4656 41.536 26.0206 41.8338 25.5306 42.0368C25.0406 42.2399 24.5153 42.3442 23.985 42.3442C23.4547 42.3442 22.9294 42.2399 22.4394 42.0368C21.9494 41.8338 21.5044 41.536 21.13 41.16L4 24V4H24L41.18 21.18C41.9345 21.9384 42.3595 22.9627 42.3595 24.03C42.3595 25.0973 41.9345 26.1216 41.18 26.88V26.82Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="14" cy="14" r="3" fill="currentColor"/>
+                  </svg>
+                {% when 'clock' %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2.5"/>
+                    <path d="M24 12V24L32 28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {% when 'star' %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 4L29.88 16.04L43.28 17.98L33.64 27.4L35.76 40.74L24 34.52L12.24 40.74L14.36 27.4L4.72 17.98L18.12 16.04L24 4Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {% else %}
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2.5"/>
+                    <path d="M16 24L21 29L32 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+              {% endcase %}
+            </div>
+            <div class="why-choose__content">
+              <h3 class="why-choose__item-title">{{ block.settings.title }}</h3>
+              {% if block.settings.description != blank %}
+                <p class="why-choose__item-desc">{{ block.settings.description }}</p>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if section.settings.show_press %}
+      <div class="why-choose__press">
+        <p class="why-choose__press-label">{{ section.settings.press_label }}</p>
+        <div class="why-choose__press-logos">
+          {% for block in section.blocks %}
+            {% if block.type == 'press_logo' %}
+              {% if block.settings.logo != blank %}
+                <div class="why-choose__press-logo" {{ block.shopify_attributes }}>
+                  {{ block.settings.logo | image_url: height: 40 | image_tag: loading: 'lazy' }}
+                </div>
+              {% elsif block.settings.logo_text != blank %}
+                <div class="why-choose__press-logo why-choose__press-logo--text" {{ block.shopify_attributes }}>
+                  {{ block.settings.logo_text }}
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.querySelector('[data-why-animate]');
+    if (!section) return;
+
+    const items = section.querySelectorAll('.why-choose__item');
+    const press = section.querySelector('.why-choose__press');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          items.forEach((item, index) => {
+            setTimeout(() => {
+              item.classList.add('is-visible');
+            }, index * 150);
+          });
+
+          if (press) {
+            setTimeout(() => {
+              press.classList.add('is-visible');
+            }, items.length * 150 + 200);
+          }
+
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.15 });
+
+    observer.observe(section);
+  });
+</script>
+
+{% stylesheet %}
+  .why-choose {
+    padding-block: clamp(3rem, 6vh, 5rem);
+  }
+
+  .why-choose__header {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .why-choose__title {
+    margin: 0;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .why-choose__grid {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+  }
+
+  .why-choose__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  /* Animation */
+  [data-why-animate] .why-choose__item {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  [data-why-animate] .why-choose__item.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .why-choose__icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 1.25rem;
+    color: var(--color-foreground, #000);
+  }
+
+  .why-choose__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .why-choose__content {
+    flex: 1;
+  }
+
+  .why-choose__item-title {
+    margin: 0 0 0.625rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .why-choose__item-desc {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: rgb(0 0 0 / 0.65);
+    line-height: 1.6;
+  }
+
+  /* Press Section */
+  .why-choose__press {
+    max-width: var(--page-width);
+    margin: 4rem auto 0;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+
+  [data-why-animate] .why-choose__press {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  [data-why-animate] .why-choose__press.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .why-choose__press-label {
+    margin: 0 0 1.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgb(0 0 0 / 0.5);
+  }
+
+  .why-choose__press-logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem 3.5rem;
+  }
+
+  .why-choose__press-logo {
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+    filter: grayscale(100%);
+  }
+
+  .why-choose__press-logo:hover {
+    opacity: 1;
+    filter: grayscale(0%);
+  }
+
+  .why-choose__press-logo img {
+    height: 24px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .why-choose__press-logo--text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: rgb(0 0 0 / 0.7);
+  }
+
+  @media screen and (max-width: 999px) {
+    .why-choose__grid {
+      gap: 2.5rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .why-choose {
+      padding-block: clamp(2.5rem, 5vh, 4rem);
+    }
+
+    .why-choose__header {
+      margin-bottom: 2rem;
+    }
+
+    .why-choose__title {
+      font-size: clamp(1.25rem, 5vw, 1.5rem);
+    }
+
+    .why-choose__grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .why-choose__item {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .why-choose__icon {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      margin-bottom: 0;
+    }
+
+    .why-choose__item-title {
+      font-size: 1rem;
+      margin-bottom: 0.375rem;
+    }
+
+    .why-choose__item-desc {
+      font-size: 0.875rem;
+    }
+
+    .why-choose__press {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+    }
+
+    .why-choose__press-logos {
+      gap: 1.5rem 2rem;
+    }
+
+    .why-choose__press-logo img {
+      height: 20px;
+    }
+
+    .why-choose__press-logo--text {
+      font-size: 1rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Why Choose Us",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why shop with us"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animations",
+      "label": "Enable entrance animations",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Press Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_press",
+      "label": "Show press logos",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "press_label",
+      "label": "Press label",
+      "default": "As seen in"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "quality",
+              "label": "Quality Check"
+            },
+            {
+              "value": "verified",
+              "label": "Verified Badge"
+            },
+            {
+              "value": "package",
+              "label": "Package"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf (Eco)"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "returns",
+              "label": "Returns"
+            },
+            {
+              "value": "secure",
+              "label": "Secure Shield"
+            },
+            {
+              "value": "shipping",
+              "label": "Shipping Truck"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "tag",
+              "label": "Price Tag"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            }
+          ],
+          "default": "quality"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Quality Assured"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "We quality check every single item. No more surprise stains or fake brands."
+        }
+      ]
+    },
+    {
+      "type": "press_logo",
+      "name": "Press Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo image"
+        },
+        {
+          "type": "text",
+          "id": "logo_text",
+          "label": "Or use text",
+          "info": "If no image is uploaded, this text will be shown"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Why Choose Us",
+      "settings": {
+        "heading": "Why shop with us",
+        "show_press": true,
+        "press_label": "As seen in"
+      },
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "verified",
+            "title": "Quality Assured",
+            "description": "We quality check every single item. No more surprise stains or fake brands."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "package",
+            "title": "Hassle-free",
+            "description": "Your pre-loved packages come straight from our warehouse. With money-back guarantees and 14-day returns."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "recycle",
+            "title": "Closing the Loop",
+            "description": "We make it easier to shop and resell pre-loved clothes. Together we can end fashion waste."
+          }
+        },
+        {
+          "type": "press_logo",
+          "settings": {
+            "logo_text": "VOGUE"
+          }
+        },
+        {
+          "type": "press_logo",
+          "settings": {
+            "logo_text": "BBC"
+          }
+        },
+        {
+          "type": "press_logo",
+          "settings": {
+            "logo_text": "The Times"
+          }
+        },
+        {
+          "type": "press_logo",
+          "settings": {
+            "logo_text": "Forbes"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
