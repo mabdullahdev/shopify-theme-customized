@@ -1,0 +1,274 @@
+{% liquid
+  assign block_settings = block.settings
+  assign product = closest.product
+
+  # Try to get condition from metafield first, then from tags
+  assign condition_raw = product.metafields.custom.condition.value
+
+  # Handle both single value and array (list) metafield types
+  if condition_raw.first
+    assign condition = condition_raw.first
+  elsif condition_raw != blank
+    assign condition = condition_raw
+  endif
+
+  # Fallback: try accessing without .value (some metafield types)
+  if condition == blank
+    assign condition_raw = product.metafields.custom.condition
+    if condition_raw.first
+      assign condition = condition_raw.first
+    elsif condition_raw != blank
+      assign condition = condition_raw
+    endif
+  endif
+
+  if condition == blank
+    # Check product tags for condition
+    for tag in product.tags
+      assign tag_lower = tag | downcase
+      if tag_lower == 'new' or tag_lower == 'condition:new'
+        assign condition = 'New'
+        break
+      elsif tag_lower == 'excellent' or tag_lower == 'condition:excellent'
+        assign condition = 'Excellent'
+        break
+      elsif tag_lower == 'good' or tag_lower == 'condition:good'
+        assign condition = 'Good'
+        break
+      elsif tag_lower == 'fair' or tag_lower == 'condition:fair'
+        assign condition = 'Fair'
+        break
+      endif
+    endfor
+  endif
+
+  # Use default if no condition found
+  if condition == blank
+    assign condition = block_settings.default_condition
+  endif
+
+  # Determine condition class for styling (force string conversion)
+  assign condition_str = condition | append: ''
+  assign condition_lower = condition_str | strip | downcase | replace: ' ', '-'
+%}
+
+{% if condition != blank %}
+  <div
+    class="product-condition-badge spacing-style"
+    style="{% render 'spacing-style', settings: block_settings %}"
+    {{ block.shopify_attributes }}
+  >
+    <div class="product-condition-badge__container">
+      <div class="product-condition-badge__label">
+        {{ block_settings.label | default: 'Condition' }}:
+      </div>
+      <div class="product-condition-badge__value product-condition-badge__value--{{ condition_lower }}">
+        <span class="product-condition-badge__dot"></span>
+        <span class="product-condition-badge__text">{{ condition }}</span>
+      </div>
+    </div>
+    {% if block_settings.show_description %}
+      <div class="product-condition-badge__description">
+        {% case condition_lower %}
+          {% when 'new' %}
+            {{ block_settings.new_description | default: 'Brand new with tags, never worn' }}
+          {% when 'excellent' %}
+            {{ block_settings.excellent_description | default: 'Like new, no visible signs of wear' }}
+          {% when 'good' %}
+            {{ block_settings.good_description | default: 'Some signs of wear, fully functional' }}
+          {% when 'fair' %}
+            {{ block_settings.fair_description | default: 'Visible wear, priced accordingly' }}
+          {% else %}
+            {{ block_settings.default_description | default: 'Pre-loved item' }}
+        {% endcase %}
+      </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .product-condition-badge {
+    width: 100%;
+  }
+
+  .product-condition-badge__container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .product-condition-badge__label {
+    font-size: 0.8125rem;
+    color: var(--color-foreground-secondary, #717171);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  .product-condition-badge__value {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .product-condition-badge__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-foreground, #1a1a1a);
+    flex-shrink: 0;
+  }
+
+  /* Condition-specific dot colors - subtle, muted tones */
+  .product-condition-badge__value--new .product-condition-badge__dot {
+    background-color: #2563eb;
+  }
+
+  .product-condition-badge__value--excellent .product-condition-badge__dot {
+    background-color: #16a34a;
+  }
+
+  .product-condition-badge__value--good .product-condition-badge__dot {
+    background-color: #ca8a04;
+  }
+
+  .product-condition-badge__value--fair .product-condition-badge__dot {
+    background-color: #dc2626;
+  }
+
+  .product-condition-badge__text {
+    color: var(--color-foreground, #1a1a1a);
+  }
+
+  .product-condition-badge__description {
+    margin-top: 6px;
+    font-size: 0.8125rem;
+    color: var(--color-foreground-secondary, #717171);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product Condition Badge",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Condition"
+    },
+    {
+      "type": "select",
+      "id": "default_condition",
+      "label": "Default condition",
+      "info": "Used when no condition is set via metafield or tag",
+      "options": [
+        {
+          "value": "",
+          "label": "None"
+        },
+        {
+          "value": "New",
+          "label": "New"
+        },
+        {
+          "value": "Excellent",
+          "label": "Excellent"
+        },
+        {
+          "value": "Good",
+          "label": "Good"
+        },
+        {
+          "value": "Fair",
+          "label": "Fair"
+        }
+      ],
+      "default": "Good"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show condition description",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Condition Descriptions"
+    },
+    {
+      "type": "text",
+      "id": "new_description",
+      "label": "New",
+      "default": "Brand new with tags, never worn"
+    },
+    {
+      "type": "text",
+      "id": "excellent_description",
+      "label": "Excellent",
+      "default": "Like new, no visible signs of wear"
+    },
+    {
+      "type": "text",
+      "id": "good_description",
+      "label": "Good",
+      "default": "Some signs of wear, fully functional"
+    },
+    {
+      "type": "text",
+      "id": "fair_description",
+      "label": "Fair",
+      "default": "Visible wear, priced accordingly"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}

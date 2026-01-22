@@ -167,16 +167,17 @@
 
     /* Position when there is media */
     .product-information__grid:not(.product-information--media-none) {
-      /* Media on the left side */
+      /* Media on the left side - 40% media / 60% details */
       &.product-information--media-left {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 40fr 60fr;
+        gap: var(--gap, 0);
 
         .product-information__media {
-          padding-right: calc(var(--gap, 0) / 2);
+          padding-right: 0;
         }
 
         .product-details {
-          padding-left: calc(var(--gap, 0) / 2);
+          padding-left: 0;
         }
 
         &:has(.media-gallery--extend) {
@@ -184,17 +185,18 @@
         }
       }
 
-      /* Media on the right side */
+      /* Media on the right side - 60% details / 40% media */
       &.product-information--media-right {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 60fr 40fr;
+        gap: var(--gap, 0);
 
         .product-information__media {
-          padding-left: calc(var(--gap, 0) / 2);
+          padding-left: 0;
           order: 1;
         }
 
         .product-details {
-          padding-right: calc(var(--gap, 0) / 2);
+          padding-right: 0;
           order: 0;
         }
 
@@ -282,23 +284,6 @@
     }
   }
 
-  /* Wider sidebar for large screens */
-  @media screen and (min-width: 1200px) {
-    .product-information__grid:not(
-        .product-information__grid--half,
-        .product-information--media-none
-      ).product-information--media-left {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .product-information__grid:not(
-        .product-information__grid--half,
-        .product-information--media-none
-      ).product-information--media-right {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
   .product-information__grid--limit-details .product-details > .group-block {
     max-width: var(--sidebar-width);
   }
@@ -306,5 +291,62 @@
   /* If the header is sticky, make product details content stick underneath the header */
   body:has(#header-group #header-component[data-sticky-state='active']) .product-details.sticky-content--desktop {
     --sticky-header-offset: var(--header-height);
+  }
+
+  /* Thrift.plus inspired layout - 40/60 split with matched heights */
+  @media screen and (min-width: 750px) {
+    .product-information__grid:not(.product-information--media-none):not(.product-information__grid--half) {
+      /* Use 40/60 split - carousel smaller, details larger */
+      &.product-information--media-left {
+        grid-template-columns: 40fr 60fr;
+      }
+
+      &.product-information--media-right {
+        grid-template-columns: 60fr 40fr;
+      }
+    }
+
+    /* Height matching - details scroll when content overflows */
+    .product-information__grid:not(.product-information--media-none) {
+      align-items: start;
+
+      .product-details {
+        max-height: calc(100vh - var(--header-height, 80px) - 48px);
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-border) transparent;
+
+        /* Custom scrollbar for webkit browsers */
+        &::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: var(--color-border);
+          border-radius: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+          background-color: var(--color-foreground-secondary);
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    .product-information__grid:not(.product-information--media-none):not(.product-information__grid--half) {
+      /* Thrift.plus style: media smaller (~40%), details larger (~60%) */
+      &.product-information--media-left {
+        grid-template-columns: 42fr 58fr;
+      }
+
+      &.product-information--media-right {
+        grid-template-columns: 58fr 42fr;
+      }
+    }
   }
 {% endstylesheet %}

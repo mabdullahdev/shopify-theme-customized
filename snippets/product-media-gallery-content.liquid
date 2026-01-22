@@ -304,8 +304,12 @@
       spacing-style
       sticky-content
       {% if media_presentation == 'grid' %}
-        media-gallery--{{ block_settings.media_columns }}-column
-        {% if block_settings.media_columns == "two" and block_settings.large_first_image%}media-gallery--large-first-image{% endif %}
+        {% if block_settings.grid_layout == 'featured' %}
+          media-gallery--featured-grid
+        {% else %}
+          media-gallery--{{ block_settings.media_columns }}-column
+          {% if block_settings.media_columns == "two" and block_settings.large_first_image %}media-gallery--large-first-image{% endif %}
+        {% endif %}
       {% endif %}
       media-gallery--{{ media_presentation }}
       {% if block_settings.slideshow_mobile_controls_style == 'hint' %}
@@ -596,6 +600,13 @@
 {% endif %}
 
 {% stylesheet %}
+  /* Grid layout borders */
+  .media-gallery__grid .product-media-container {
+    border: 1px solid var(--color-border, #e5e5e5);
+    border-radius: var(--media-radius, 4px);
+    overflow: hidden;
+  }
+
   .dialog-zoomed-gallery {
     cursor: zoom-out;
   }

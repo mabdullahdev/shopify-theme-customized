@@ -35,6 +35,24 @@
     },
     {
       "type": "select",
+      "id": "grid_layout",
+      "label": "Grid layout",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "featured",
+          "label": "Featured + Grid"
+        }
+      ],
+      "default": "standard",
+      "info": "Featured + Grid shows a large image on left with smaller images stacked on right",
+      "visible_if": "{{ block.settings.media_presentation == 'grid' }}"
+    },
+    {
+      "type": "select",
       "id": "media_columns",
       "label": "t:settings.columns",
       "options": [
@@ -48,7 +66,7 @@
         }
       ],
       "default": "one",
-      "visible_if": "{{ block.settings.media_presentation == 'grid' }}"
+      "visible_if": "{{ block.settings.media_presentation == 'grid' and block.settings.grid_layout == 'standard' }}"
     },
     {
       "type": "range",

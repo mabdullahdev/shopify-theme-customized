@@ -109,6 +109,32 @@
               {{ accelerated_checkout_button }}
             </div>
           {% endif %}
+
+          {%- comment -%} Bid Your Price (WhatsApp) Button {%- endcomment -%}
+          {% if block_settings.show_whatsapp_button and block_settings.whatsapp_number != blank %}
+            {%- assign whatsapp_number = block_settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' -%}
+            {%- assign product_url = shop.url | append: product.url -%}
+            {%- assign safe_title = product.title | escape -%}
+            {%- assign whatsapp_message = 'Hi! I would like to make an offer on: ' | append: safe_title | append: ' - ' | append: product_url -%}
+            {%- assign whatsapp_message_encoded = whatsapp_message | url_encode -%}
+            {%- assign whatsapp_url = 'https://wa.me/' | append: whatsapp_number | append: '?text=' | append: whatsapp_message_encoded -%}
+            <div class="custom-buy-button__whatsapp">
+              <a
+                {% if can_add_to_cart %}
+                  href="{{ whatsapp_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                {% endif %}
+                class="custom-whatsapp-button{% unless can_add_to_cart %} custom-whatsapp-button--disabled{% endunless %}"
+                {% unless can_add_to_cart %}aria-disabled="true"{% endunless %}
+              >
+                <svg class="whatsapp-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                <span>{{ block_settings.whatsapp_button_text | default: 'Bid Your Price' }}</span>
+              </a>
+            </div>
+          {% endif %}
         </div>
       {%- endform -%}
     </product-form-component>
@@ -148,15 +174,22 @@
   /* Add to Cart Button Styling */
   .custom-add-to-cart-button {
     width: 100%;
-    padding-block: var(--padding-lg);
+    min-height: 50px;
+    padding-block: 0;
+    padding-inline: var(--padding-md);
     font-weight: 700;
     text-transform: uppercase;
+    line-height: 1;
     border-radius: var(--corner-radius, 4px);
     transition: all var(--animation-speed) var(--animation-easing);
     border: none;
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .custom-add-to-cart-button:not(:disabled) {
@@ -218,15 +251,22 @@
 
   .custom-buy-button__buy-now .shopify-payment-button__button {
     width: 100% !important;
-    padding-block: var(--padding-lg) !important;
+    min-height: 50px !important;
+    height: 50px !important;
+    padding-block: 0 !important;
+    padding-inline: var(--padding-md) !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
+    line-height: 1 !important;
     border-radius: var(--corner-radius, 4px) !important;
     transition: all var(--animation-speed) var(--animation-easing) !important;
     border: 1px solid var(--color-border) !important;
     background-color: var(--color-background) !important;
     color: var(--color-foreground) !important;
-    min-height: auto !important;
+    box-sizing: border-box !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .custom-buy-button__buy-now .shopify-payment-button__button:hover {
@@ -253,8 +293,10 @@
     }
 
     .custom-add-to-cart-button,
-    .custom-buy-button__buy-now .shopify-payment-button__button {
-      padding-block: var(--padding-md);
+    .custom-buy-button__buy-now .shopify-payment-button__button,
+    .custom-whatsapp-button {
+      min-height: 46px;
+      height: 46px;
     }
   }
 
@@ -269,6 +311,73 @@
   .custom-buy-button__buy-now > * {
     width: 100%;
   }
+
+  /* WhatsApp / Bid Your Price Button */
+  .custom-buy-button__whatsapp {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .custom-whatsapp-button {
+    width: 100%;
+    min-height: 50px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding-block: 0;
+    padding-inline: var(--padding-md);
+    font-weight: 700;
+    font-size: inherit;
+    text-transform: uppercase;
+    text-decoration: none;
+    line-height: 1;
+    border-radius: var(--corner-radius, 4px);
+    transition: all var(--animation-speed) var(--animation-easing);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+
+  .custom-whatsapp-button:hover {
+    background-color: var(--color-background);
+    border-color: var(--color-foreground);
+    color: var(--color-foreground);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .custom-whatsapp-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .custom-whatsapp-button .whatsapp-icon {
+    flex-shrink: 0;
+  }
+
+  /* WhatsApp Button Disabled State (Sold Out) */
+  .custom-whatsapp-button--disabled {
+    background-color: var(--color-border);
+    color: var(--color-foreground-secondary);
+    border-color: var(--color-border);
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .custom-whatsapp-button--disabled:hover {
+    transform: none;
+    box-shadow: none;
+    background-color: var(--color-border);
+    border-color: var(--color-border);
+  }
+
 {% endstylesheet %}
 
 {% schema %}
@@ -285,6 +394,29 @@
       "id": "gift_card_form",
       "label": "Show gift card form",
       "default": false
+    },
+    {
+      "type": "header",
+      "content": "WhatsApp - Bid Your Price"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_whatsapp_button",
+      "label": "Show WhatsApp button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp number",
+      "info": "Include country code (e.g., 447123456789)",
+      "default": "9203035850535"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_button_text",
+      "label": "Button text",
+      "default": "Bid Your Price"
     },
     {
       "type": "header",
