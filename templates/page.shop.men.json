@@ -63,35 +63,35 @@
     "categories": {
       "type": "shop-page-categories",
       "blocks": {
-        "jackets": {
+        "tshirts": {
           "type": "category",
           "settings": {
-            "title": "Jackets",
-            "image": "shopify://shop_images/jacket-category.png",
+            "title": "T-shirts",
+            "image": "shopify://shop_images/tshirts-category.png",
             "link": "/collections/jackets/men"
           }
         },
-        "hoodies": {
+        "bottoms": {
           "type": "category",
           "settings": {
-            "title": "Hoodies",
-            "image": "shopify://shop_images/hoodie-category.png",
-            "link": "/collections/hoodies/men"
+            "title": "Bottoms",
+            "image": "shopify://shop_images/bottoms-category.png",
+            "link": "/collections/bottoms/men"
           }
         },
-        "shoes": {
+        "footwear": {
           "type": "category",
           "settings": {
-            "title": "Shoes",
-            "image": "shopify://shop_images/shoes-category.png",
-            "link": "/collections/shoes/men"
+            "title": "Footwear",
+            "image": "shopify://shop_images/footwear-category.png",
+            "link": "/collections/footwear/men"
           }
         }
       },
       "block_order": [
-        "jackets",
-        "hoodies",
-        "shoes"
+        "tshirts",
+        "bottoms",
+        "footwear"
       ],
       "settings": {
         "section_width": "page-width",
@@ -99,7 +99,7 @@
         "subheading": "Dial in your look with hand-picked pre-loved staples.",
         "view_all_text": "",
         "view_all_link": "",
-        "text_style": "below",
+        "text_style": "overlay",
         "show_hover_arrow": true,
         "aspect_ratio": "1 / 1",
         "columns": 3,

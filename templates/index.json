@@ -15,7 +15,10 @@
         "slide_1": {
           "type": "slide",
           "settings": {
-            "background_color": "#DFE5E3",
+            "background_image": "shopify://shop_images/hero-slide-1.png",
+            "mobile_background_image": "shopify://shop_images/hero-slide-1-mobile.png",
+            "image_fit": "contain",
+            "background_color": "#dfe5e3",
             "enable_overlay": false,
             "overlay_opacity": 30,
             "badge_text": "",
@@ -30,7 +33,10 @@
         "slide_2": {
           "type": "slide",
           "settings": {
-            "background_color": "#F2F3ED",
+            "background_image": "shopify://shop_images/hero-slide-2.png",
+            "mobile_background_image": "shopify://shop_images/hero-slide-2-mobile.png",
+            "image_fit": "cover",
+            "background_color": "#f2f3ed",
             "enable_overlay": false,
             "overlay_opacity": 30,
             "badge_text": "ECO-FRIENDLY",
@@ -45,9 +51,13 @@
         "slide_3": {
           "type": "slide",
           "settings": {
-            "background_color": "#E8E4DC",
+            "background_image": "shopify://shop_images/hero-slide-3.png",
+            "mobile_background_image": "shopify://shop_images/hero-slide-3-mobile.png",
+            "image_fit": "cover",
+            "background_color": "#e8e4dc",
             "enable_overlay": false,
             "overlay_opacity": 30,
+            "badge_text": "",
             "heading": "NEW ARRIVALS WEEKLY",
             "subheading": "Fresh finds, carefully curated just for you.",
             "button_label": "Explore",
@@ -78,9 +88,10 @@
             "subtitle": "Curated pre-loved fashion",
             "cta_text": "Shop Women",
             "link": "shopify://pages/women",
-            "background_color": "#F2F3ED",
+            "image": "shopify://shop_images/shop-women.png",
+            "background_color": "#f2f3ed",
             "enable_overlay": true,
-            "text_color": "#FFFFFF"
+            "text_color": "#ffffff"
           }
         },
         "men": {
@@ -90,9 +101,10 @@
             "subtitle": "Quality secondhand style",
             "cta_text": "Shop Men",
             "link": "shopify://pages/men",
-            "background_color": "#E8E4DC",
+            "image": "shopify://shop_images/shop-men.png",
+            "background_color": "#e8e4dc",
             "enable_overlay": true,
-            "text_color": "#FFFFFF"
+            "text_color": "#ffffff"
           }
         }
       },

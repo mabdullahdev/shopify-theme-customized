@@ -170,7 +170,6 @@
                 "default_condition": "Good",
                 "show_description": true,
                 "excellent_description": "Like new, no visible signs of wear",
-                "very_good_description": "Minor signs of wear, barely noticeable",
                 "good_description": "Some signs of wear, fully functional",
                 "fair_description": "Visible wear, priced accordingly",
                 "padding-block-start": 8,
@@ -227,7 +226,7 @@
               },
               "block_order": []
             },
-                        "trust_badges": {
+            "trust_badges": {
               "type": "product-trust-badges",
               "settings": {
                 "badge_1_text": "Easy returns",
@@ -298,7 +297,9 @@
                       }
                     }
                   },
-                  "block_order": ["shipping_text"]
+                  "block_order": [
+                    "shipping_text"
+                  ]
                 },
                 "accordion_returns": {
                   "type": "_accordion-row",
@@ -315,7 +316,9 @@
                       }
                     }
                   },
-                  "block_order": ["returns_text"]
+                  "block_order": [
+                    "returns_text"
+                  ]
                 },
                 "accordion_condition": {
                   "type": "_accordion-row",
@@ -332,10 +335,16 @@
                       }
                     }
                   },
-                  "block_order": ["condition_text"]
+                  "block_order": [
+                    "condition_text"
+                  ]
                 }
               },
-              "block_order": ["accordion_shipping", "accordion_returns", "accordion_condition"]
+              "block_order": [
+                "accordion_shipping",
+                "accordion_returns",
+                "accordion_condition"
+              ]
             }
           },
           "block_order": [
