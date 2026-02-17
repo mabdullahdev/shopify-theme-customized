@@ -1,31 +1,31 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
   <div
-    class="just-dropped spacing-style"
+    class="featured spacing-style"
     style="{% render 'spacing-style', settings: section.settings %}"
   >
-    <div class="just-dropped__header">
-      <div class="just-dropped__header-text">
+    <div class="featured__header">
+      <div class="featured__header-text">
         {% if section.settings.heading != blank %}
-          <h2 class="just-dropped__title">
+          <h2 class="featured__title">
             {{ section.settings.heading }}
           </h2>
         {% endif %}
 
         {% if section.settings.subheading != blank %}
-          <p class="just-dropped__subtitle">
+          <p class="featured__subtitle">
             {{ section.settings.subheading }}
           </p>
         {% endif %}
       </div>
 
-      <div class="just-dropped__nav">
-        <button class="just-dropped__nav-btn just-dropped__nav-btn--prev" aria-label="Previous" type="button">
+      <div class="featured__nav">
+        <button class="featured__nav-btn featured__nav-btn--prev" aria-label="Previous" type="button">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <button class="just-dropped__nav-btn just-dropped__nav-btn--next" aria-label="Next" type="button">
+        <button class="featured__nav-btn featured__nav-btn--next" aria-label="Next" type="button">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -56,8 +56,8 @@
       endif
     %}
 
-    <div class="just-dropped__carousel-wrapper">
-      <div class="just-dropped__carousel">
+    <div class="featured__carousel-wrapper">
+      <div class="featured__carousel">
         {% if collection != blank and collection.products.size > 0 %}
           {% assign shown_count = 0 %}
           {% for product in collection.products %}
@@ -77,8 +77,8 @@
             {% if shown_count > product_limit %}
               {% break %}
             {% endif %}
-            <a href="{{ product.url }}" class="just-dropped__product">
-              <div class="just-dropped__product-image">
+            <a href="{{ product.url }}" class="featured__product">
+              <div class="featured__product-image">
                 {% if product.featured_image != blank %}
                   <img
                     src="{{ product.featured_image | image_url: width: 400 }}"
@@ -94,17 +94,17 @@
                     height="{{ product.featured_image.height }}"
                   >
                 {% else %}
-                  <div class="just-dropped__placeholder">
+                  <div class="featured__placeholder">
                     {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
                   </div>
                 {% endif %}
               </div>
-              <div class="just-dropped__product-info">
-                <h3 class="just-dropped__product-title">{{ product.title }}</h3>
-                <div class="just-dropped__product-price">
+              <div class="featured__product-info">
+                <h3 class="featured__product-title">{{ product.title }}</h3>
+                <div class="featured__product-price">
                   {% if product.compare_at_price > product.price %}
-                    <span class="just-dropped__price--sale">{{ product.price | money }}</span>
-                    <span class="just-dropped__price--compare">{{ product.compare_at_price | money }}</span>
+                    <span class="featured__price--sale">{{ product.price | money }}</span>
+                    <span class="featured__price--compare">{{ product.compare_at_price | money }}</span>
                   {% else %}
                     <span>{{ product.price | money }}</span>
                   {% endif %}
@@ -114,15 +114,15 @@
           {% endfor %}
         {% else %}
           {% for i in (1..product_limit) %}
-            <div class="just-dropped__product just-dropped__product--placeholder">
-              <div class="just-dropped__product-image">
-                <div class="just-dropped__placeholder">
+            <div class="featured__product featured__product--placeholder">
+              <div class="featured__product-image">
+                <div class="featured__placeholder">
                   {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
                 </div>
               </div>
-              <div class="just-dropped__product-info">
-                <h3 class="just-dropped__product-title">Product Title</h3>
-                <div class="just-dropped__product-price">
+              <div class="featured__product-info">
+                <h3 class="featured__product-title">Product Title</h3>
+                <div class="featured__product-price">
                   <span>{{ 2999 | money }}</span>
                 </div>
               </div>
@@ -133,10 +133,10 @@
     </div>
 
     {% if section.settings.view_all_link != blank %}
-      <div class="just-dropped__footer">
-        <a href="{{ section.settings.view_all_link }}" class="just-dropped__view-all">
-          {{ section.settings.view_all_text | default: 'View all new arrivals' }}
-          <svg class="just-dropped__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div class="featured__footer">
+        <a href="{{ section.settings.view_all_link }}" class="featured__view-all">
+          {{ section.settings.view_all_text | default: 'View all featured' }}
+          <svg class="featured__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
@@ -147,12 +147,12 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const section = document.querySelector('.just-dropped');
+    const section = document.querySelector('.featured');
     if (!section) return;
 
-    const carousel = section.querySelector('.just-dropped__carousel');
-    const prevBtn = section.querySelector('.just-dropped__nav-btn--prev');
-    const nextBtn = section.querySelector('.just-dropped__nav-btn--next');
+    const carousel = section.querySelector('.featured__carousel');
+    const prevBtn = section.querySelector('.featured__nav-btn--prev');
+    const nextBtn = section.querySelector('.featured__nav-btn--next');
 
     if (!carousel || !prevBtn || !nextBtn) return;
 
@@ -163,7 +163,7 @@
     let isPaused = false;
 
     const getScrollAmount = () => {
-      const product = carousel.querySelector('.just-dropped__product');
+      const product = carousel.querySelector('.featured__product');
       if (!product) return 300;
       const style = getComputedStyle(carousel);
       const gap = parseFloat(style.gap) || 16;
@@ -260,11 +260,11 @@
 </script>
 
 {% stylesheet %}
-  .just-dropped {
+  .featured {
     padding-block: clamp(2rem, 4vh, 3rem);
   }
 
-  .just-dropped__header {
+  .featured__header {
     max-width: var(--page-width);
     margin-inline: auto;
     margin-bottom: 1.25rem;
@@ -274,32 +274,32 @@
     gap: 1rem;
   }
 
-  .just-dropped__header-text {
+  .featured__header-text {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
   }
 
-  .just-dropped__title {
+  .featured__title {
     margin: 0;
     font-size: clamp(1.75rem, 3vw, 2.25rem);
     text-transform: uppercase;
   }
 
-  .just-dropped__subtitle {
+  .featured__subtitle {
     margin: 0;
     max-width: 32rem;
     font-size: 0.95rem;
     color: rgb(0 0 0 / 0.7);
   }
 
-  .just-dropped__nav {
+  .featured__nav {
     display: flex;
     gap: 0.5rem;
     flex-shrink: 0;
   }
 
-  .just-dropped__nav-btn {
+  .featured__nav-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -313,22 +313,22 @@
     transition: all 0.2s ease;
   }
 
-  .just-dropped__nav-btn:hover:not(:disabled) {
+  .featured__nav-btn:hover:not(:disabled) {
     background: var(--color-foreground, #000);
     color: var(--color-background, #fff);
   }
 
-  .just-dropped__nav-btn:disabled {
+  .featured__nav-btn:disabled {
     cursor: not-allowed;
   }
 
-  .just-dropped__carousel-wrapper {
+  .featured__carousel-wrapper {
     position: relative;
     max-width: var(--page-width);
     margin-inline: auto;
   }
 
-  .just-dropped__carousel {
+  .featured__carousel {
     display: flex;
     gap: 1rem;
     overflow-x: auto;
@@ -340,11 +340,11 @@
     padding-bottom: 0.5rem;
   }
 
-  .just-dropped__carousel::-webkit-scrollbar {
+  .featured__carousel::-webkit-scrollbar {
     display: none;
   }
 
-  .just-dropped__product {
+  .featured__product {
     flex: 0 0 auto;
     width: calc((100% - 3rem) / 4);
     min-width: 200px;
@@ -357,11 +357,11 @@
     transition: transform 0.2s ease;
   }
 
-  .just-dropped__product:hover {
+  .featured__product:hover {
     transform: translateY(-4px);
   }
 
-  .just-dropped__product-image {
+  .featured__product-image {
     position: relative;
     aspect-ratio: 3 / 4;
     overflow: hidden;
@@ -369,18 +369,18 @@
     margin-bottom: 0.75rem;
   }
 
-  .just-dropped__product-image img {
+  .featured__product-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
   }
 
-  .just-dropped__product:hover .just-dropped__product-image img {
+  .featured__product:hover .featured__product-image img {
     transform: scale(1.05);
   }
 
-  .just-dropped__placeholder {
+  .featured__placeholder {
     width: 100%;
     height: 100%;
     display: flex;
@@ -389,19 +389,19 @@
     background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
   }
 
-  .just-dropped__placeholder .placeholder-svg {
+  .featured__placeholder .placeholder-svg {
     width: 60%;
     height: 60%;
     opacity: 0.5;
   }
 
-  .just-dropped__product-info {
+  .featured__product-info {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
   }
 
-  .just-dropped__product-title {
+  .featured__product-title {
     margin: 0;
     font-size: 0.875rem;
     font-weight: 500;
@@ -412,24 +412,24 @@
     overflow: hidden;
   }
 
-  .just-dropped__product-price {
+  .featured__product-price {
     font-size: 0.875rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
 
-  .just-dropped__price--sale {
+  .featured__price--sale {
     font-weight: 600;
     color: #dc2626;
   }
 
-  .just-dropped__price--compare {
+  .featured__price--compare {
     text-decoration: line-through;
     opacity: 0.6;
   }
 
-  .just-dropped__footer {
+  .featured__footer {
     max-width: var(--page-width);
     margin-inline: auto;
     margin-top: 1.5rem;
@@ -437,7 +437,7 @@
     align-items: center;
   }
 
-  .just-dropped__view-all {
+  .featured__view-all {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -450,64 +450,64 @@
     transition: opacity 0.2s ease;
   }
 
-  .just-dropped__view-all:hover {
+  .featured__view-all:hover {
     opacity: 0.7;
   }
 
-  .just-dropped__arrow {
+  .featured__arrow {
     flex-shrink: 0;
   }
 
   @media screen and (max-width: 999px) {
-    .just-dropped__product {
+    .featured__product {
       width: calc((100% - 2rem) / 3);
       min-width: 180px;
     }
   }
 
   @media screen and (max-width: 749px) {
-    .just-dropped {
+    .featured {
       padding-block: clamp(1.5rem, 4vh, 2.5rem);
     }
 
-    .just-dropped__header {
+    .featured__header {
       margin-bottom: 1rem;
       flex-direction: column;
       align-items: flex-start;
       gap: 0.75rem;
     }
 
-    .just-dropped__title {
+    .featured__title {
       font-size: clamp(1.5rem, 4vw, 1.75rem);
     }
 
-    .just-dropped__subtitle {
+    .featured__subtitle {
       font-size: 0.875rem;
     }
 
-    .just-dropped__nav {
+    .featured__nav {
       display: none;
     }
 
-    .just-dropped__product {
+    .featured__product {
       width: 42vw;
       min-width: 150px;
       max-width: 200px;
     }
 
-    .just-dropped__product:hover {
+    .featured__product:hover {
       transform: none;
     }
 
-    .just-dropped__product-title {
+    .featured__product-title {
       font-size: 0.8rem;
     }
 
-    .just-dropped__product-price {
+    .featured__product-price {
       font-size: 0.8rem;
     }
 
-    .just-dropped__footer {
+    .featured__footer {
       margin-top: 1.25rem;
     }
   }
@@ -515,7 +515,7 @@
 
 {% schema %}
 {
-  "name": "Just Dropped",
+  "name": "Featured",
   "class": "section-wrapper",
   "settings": [
     {
@@ -584,19 +584,19 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "JUST DROPPED"
+      "default": "FEATURED"
     },
     {
       "type": "text",
       "id": "subheading",
       "label": "Subheading",
-      "default": "Fresh finds, just landed. One-of-a-kind pieces waiting for you."
+      "default": "Handpicked pieces we love. New and pre-loved."
     },
     {
       "type": "text",
       "id": "view_all_text",
       "label": "View all link text",
-      "default": "View all new arrivals"
+      "default": "View all featured"
     },
     {
       "type": "url",
@@ -636,10 +636,10 @@
   ],
   "presets": [
     {
-      "name": "Just Dropped",
+      "name": "Featured",
       "settings": {
-        "heading": "JUST DROPPED",
-        "subheading": "Fresh finds, just landed. One-of-a-kind pieces waiting for you.",
+        "heading": "FEATURED",
+        "subheading": "Handpicked pieces we love. New and pre-loved.",
         "product_limit": 8
       }
     }

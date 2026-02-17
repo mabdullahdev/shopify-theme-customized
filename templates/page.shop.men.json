@@ -23,9 +23,8 @@
     "hero_image": {
       "type": "shop-page-hero-image",
       "settings": {
-        "section_width": "page-width",
-        "background_image": "shopify://shop_images/men-page-hero-image.png",
-        "mobile_background_image": "",
+        "background_image": "shopify://shop_images/shop-men-page-hero-image.png",
+        "mobile_background_image": "shopify://shop_images/shop-men-page-hero-image-mobile.png",
         "background_color": "#F2F3ED",
         "enable_overlay": false,
         "overlay_style": "gradient-left",
@@ -37,23 +36,25 @@
         "button_link": "/collections/all",
         "content_position": "center",
         "text_alignment": "center",
+        "section_width": "page-width",
         "enable_animations": true,
         "color_scheme": "",
         "padding-block-start": 40,
         "padding-block-end": 40
       }
     },
-    "just_dropped": {
-      "type": "shop-page-just-dropped",
+    "featured": {
+      "type": "shop-page-featured",
       "settings": {
-        "section_width": "page-width",
-        "heading": "JUST DROPPED",
-        "subheading": "Fresh finds, just landed. One-of-a-kind pieces waiting for you.",
+        "collection": "",
         "filter_tag": "men",
         "product_limit": 8,
         "autoplay": true,
         "autoplay_speed": 3000,
-        "view_all_text": "View all new arrivals",
+        "section_width": "page-width",
+        "heading": "FEATURED",
+        "subheading": "Handpicked pieces we love. New and pre-loved.",
+        "view_all_text": "View all featured",
         "view_all_link": "/collections/new-arrivals/men",
         "color_scheme": "",
         "padding-block-start": 40,
@@ -94,7 +95,6 @@
         "footwear"
       ],
       "settings": {
-        "section_width": "page-width",
         "heading": "MEN'S CATEGORIES",
         "subheading": "Dial in your look with hand-picked pre-loved staples.",
         "view_all_text": "",
@@ -106,6 +106,7 @@
         "columns_tablet": 2,
         "columns_mobile": "2",
         "mobile_carousel": true,
+        "section_width": "page-width",
         "enable_animations": true,
         "color_scheme": "",
         "padding-block-start": 32,
@@ -227,7 +228,6 @@
         "ralph_lauren"
       ],
       "settings": {
-        "section_width": "page-width",
         "heading": "FROM ICONIC BRANDS TO TIMELESS CLASSICS.",
         "subheading": "Handpicked and quality verified by us.",
         "view_all_text": "View all brands",
@@ -239,7 +239,21 @@
         "columns_tablet": 4,
         "columns_mobile": "3",
         "mobile_carousel": true,
+        "section_width": "page-width",
         "enable_animations": true,
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "instagram": {
+      "type": "shop-page-instagram",
+      "settings": {
+        "heading": "Follow ECOT on Instagram",
+        "subheading": "New drops and pre-loved inspo — follow along.",
+        "instagram_handle": "@ecot.store",
+        "instagram_url": "https://www.instagram.com/ecot.store/",
+        "section_width": "page-width",
         "color_scheme": "",
         "padding-block-start": 40,
         "padding-block-end": 40
@@ -249,8 +263,9 @@
   "order": [
     "header",
     "hero_image",
-    "just_dropped",
+    "featured",
     "categories",
-    "brands"
+    "brands",
+    "instagram"
   ]
 }

@@ -107,16 +107,15 @@
 {% stylesheet %}
   .shop-hero {
     position: relative;
-    min-height: 420px;
+    width: 100%;
+    aspect-ratio: 24 / 7;
     display: flex;
     align-items: center;
     padding-block: clamp(3rem, 6vh, 5rem);
     padding-inline: var(--page-margin);
     background-color: var(--shop-hero-background-color, #F2F3ED);
     background-image: var(--shop-hero-background-image);
-    background-size: 50% auto;
-    background-position: right center;
-    background-repeat: no-repeat;
+    background-size: cover;
     overflow: hidden;
   }
 
@@ -252,7 +251,7 @@
 
   @media screen and (max-width: 749px) {
     .shop-hero {
-      min-height: 320px;
+      aspect-ratio: 390 / 450;
       padding-inline: var(--padding-inline, 1.25rem);
       padding-block: clamp(2.5rem, 5vh, 3.5rem);
       justify-content: center;
@@ -290,7 +289,7 @@
 
   @media screen and (max-width: 480px) {
     .shop-hero {
-      min-height: 280px;
+      aspect-ratio: 390 / 450;
       padding-block: clamp(2rem, 4vh, 3rem);
     }
 
